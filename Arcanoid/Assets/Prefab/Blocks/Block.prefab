@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3035833543213611235}
   - component: {fileID: 3035833543213611294}
   - component: {fileID: 3035833543213611293}
-  - component: {fileID: 3035833543213611292}
+  - component: {fileID: 3686403850969004707}
   m_Layer: 5
   m_Name: Block
   m_TagString: Untagged
@@ -67,7 +67,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!61 &3035833543213611292
+--- !u!61 &3686403850969004707
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
