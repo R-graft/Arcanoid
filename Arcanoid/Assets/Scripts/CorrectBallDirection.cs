@@ -20,7 +20,7 @@ public class CorrectBallDirection : MonoBehaviour
 
         _minBounseAngle = 2;
 
-        _forceIndex = 0.001f;
+        _forceIndex = 0.002f;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -32,8 +32,6 @@ public class CorrectBallDirection : MonoBehaviour
             Vector2 collisionNormal = collision.contacts[0].normal;
 
             _collisionAngle = Vector2.Angle(_priviousPosition - _currentPosition, collisionNormal);
-
-            print(_collisionAngle);
 
             if (_collisionAngle < _minBounseAngle)
             {
