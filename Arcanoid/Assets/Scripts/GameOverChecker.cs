@@ -4,24 +4,13 @@ using UnityEngine;
 
 public class GameOverChecker : MonoBehaviour
 {
-    [SerializeField]
-    private Collider2D _downCollider;
-
-    private int _ballCount;
-    void Start()
-    {
-        
-    }
-
+    private int _ballCount = 1;
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (_ballCount == 1)
         {
-
+            PopUpManager.Instance.ShowHidePanel("GameOver", true);
         }
-    }
-    void Update()
-    {
-        
     }
 }

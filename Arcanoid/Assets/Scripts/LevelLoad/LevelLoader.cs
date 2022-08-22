@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelLoader : MonoBehaviour
@@ -10,17 +9,17 @@ public class LevelLoader : MonoBehaviour
     [SerializeField]
     private GameObject _blocksPanel;
 
-    private LevelReader levelReader;
+    private LevelReader _levelReader;
 
     private LevelReader.LevelData levelData;
 
     private void Awake()
     {
-        levelReader = new LevelReader();
+        _levelReader = new LevelReader();
     }
     private void GetLevelData(string levelId)
     {
-        levelData = levelReader.GetFileData(levelId);
+        levelData = _levelReader.GetFileData(levelId);
     }
     private void LoadLevel(string levelId)
     {

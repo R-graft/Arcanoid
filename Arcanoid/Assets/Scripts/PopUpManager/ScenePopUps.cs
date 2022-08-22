@@ -10,6 +10,10 @@ public class ScenePopUps : MonoBehaviour
 
     private void Awake()
     {
+        
+    }
+    private void Start()
+    {
         foreach (var item in _panels)
         {
             GameObject newPanel = Instantiate(item.panelObject, transform);
@@ -18,9 +22,7 @@ public class ScenePopUps : MonoBehaviour
 
             _instancePanels.Add(new PopUp(item.panelId, newPanel));
         }
-    }
-    private void Start()
-    {
+
         PopUpManager.Instance.SetCurrentScenes(_instancePanels);
     }
 }

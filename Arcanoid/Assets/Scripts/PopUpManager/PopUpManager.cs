@@ -30,8 +30,4 @@ public class PopUpManager : MonoBehaviour
             Debug.Log("panel in manager not found");
         }
     }
-    private void Start()
-    {
-        ShowHidePanel("ellow", true);
-    }
 }
