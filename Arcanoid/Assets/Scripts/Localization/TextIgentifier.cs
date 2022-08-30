@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEngine;
 
 public class TextIgentifier : LangResolver
 {
@@ -16,6 +17,13 @@ public class TextIgentifier : LangResolver
     }
     private void ResolveText()
     {
-        _textMeshPro.text = LangDictionary[identifier];        
+        if (LangDictionary != null)
+        {
+            _textMeshPro.text = LangDictionary[identifier];
+        }
+        else
+        {
+            Debug.Log("LangResolver not exist");
+        }
     }
 }

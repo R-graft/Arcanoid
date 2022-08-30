@@ -124,7 +124,7 @@ public class Pack : MonoBehaviour
         {
             GameProgress.Instance.CurrentPackMaxLevel = _maxPackLevel;
 
-            LevelAttributes.Instance.SetAtrributes(_pathToIcon, _packProgressText.text, _packName);
+            LevelAttributes.Instance.SetAtrributes(_pathToIcon, _packProgressText.text, _packNameText.text);
         }
     }
 }
