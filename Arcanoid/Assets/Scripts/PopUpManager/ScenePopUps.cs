@@ -8,10 +8,6 @@ public class ScenePopUps : MonoBehaviour
 
     private List<PopUp> _instancePanels = new List<PopUp>();
 
-    private void Awake()
-    {
-        
-    }
     private void Start()
     {
         foreach (var item in _panels)

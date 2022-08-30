@@ -5,6 +5,9 @@ public class PlatformMove : MonoBehaviour
     [SerializeField]
     private Transform _moveConstrainter;
 
+    [SerializeField]
+    private PlayerInputs _inputs;
+
     private Rigidbody2D _objectRb;
     
     private float _xDirection;
@@ -16,6 +19,7 @@ public class PlatformMove : MonoBehaviour
     private float _yPosition;
 
     private float _halfScale;
+
     private void Awake()
     {
         _objectRb = GetComponent<Rigidbody2D>();
@@ -35,17 +39,9 @@ public class PlatformMove : MonoBehaviour
 
         _objectRb.position = Vector2.MoveTowards(_objectRb.position, _moveDirection, _moveSpeed);
     }
-    private void GetDirection(float inputDirection)
-    {
-        _xDirection = inputDirection;
-    }
 
-    private void OnEnable()
+    private void Update()
     {
-        PlayerInputs.OnMove += GetDirection;
-    }
-    private void OnDisable()
-    {
-        PlayerInputs.OnMove -= GetDirection;
+        _xDirection = _inputs._inputDirection;
     }
 }

@@ -1,2 +1,9 @@
+arcanoid=Arcanoid
 play=Play
 exit=Exit
+level=Level
+pack=Pack
+pause=Pause
+gameover=GameOver
+continue=Continue
+tomenu=Menu

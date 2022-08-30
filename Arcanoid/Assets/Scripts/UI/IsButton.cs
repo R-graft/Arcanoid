@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class IsButton : MonoBehaviour
 {
-    private ScenesManager _sceneChanger = new ScenesManager();
+    private ScenesManager _sceneChanger;
 
+    private void Awake()
+    {
+        _sceneChanger = gameObject.AddComponent<ScenesManager>();
+    }
     public void LoadScene(int sceneIndex) 
     { 
         _sceneChanger.LoadScene(sceneIndex);

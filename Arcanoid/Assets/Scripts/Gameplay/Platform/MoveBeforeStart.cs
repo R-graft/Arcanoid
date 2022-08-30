@@ -16,11 +16,13 @@ public class MoveBeforeStart : MonoBehaviour
 
     private Vector2 _startPosition;
 
-    private float _ballDisposition;
+    private float _ballDisposition = 0.9f;
+
+    private float _ballOffset = 0.1f;
 
     private void Awake()
     {
-        _ballDisposition = 0.9f;
+        Events.loseBall.AddListener(MoveBall);
     }
     private void Start()
     {
@@ -45,7 +47,9 @@ public class MoveBeforeStart : MonoBehaviour
     }
     private void FollowPlatform()
     {
-        _startPosition = new Vector2((_platformTransform.position.x) / _ballDisposition, _ballRb.position.y);
+        _startPosition = new Vector2((_platformTransform.position.x) / _ballDisposition, _platformTransform.position.y + _ballOffset);
+
+        _ballRb.velocity = Vector2.zero;
 
         _ballRb.position = _startPosition;
     }

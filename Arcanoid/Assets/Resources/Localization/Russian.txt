@@ -1,2 +1,9 @@
+arcanoid=Арканоид
 play=Играть
 exit=Выход
+level=Уровень
+pack=Пак
+pause=Пауза
+gameover=ИграОкончена
+continue=Продолжить
+tomenu=Меню

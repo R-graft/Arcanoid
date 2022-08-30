@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,9 +14,37 @@ public class LevelLoader : MonoBehaviour
 
     private LevelReader.LevelData levelData;
 
+    private int _currentPack;
+
+    private int _currentLevel;
+
+    private int _currentBlocksCount;
+
+    public static Action<int> onBlocksCreated;
+
     private void Awake()
     {
         _levelReader = new LevelReader();
+
+         GetProgress();
+    }
+
+    private void GetProgress()
+    {
+        if (GameProgress.Instance != null)
+        {
+            _currentPack = GameProgress.Instance.OpenPackIndex;
+
+            _currentLevel = GameProgress.Instance.PackLevel;
+        }
+        else
+        {
+            Debug.Log("Game progress not exist");
+
+            _currentPack = 0;
+
+            _currentLevel = 0;
+        }
     }
     private void GetLevelData(string levelId)
     {
@@ -43,12 +72,23 @@ public class LevelLoader : MonoBehaviour
                 yield return new WaitForSecondsRealtime(0.05f);
 
                 _blockPool.GrabFromPool(levelData.blocks[i]).transform.SetParent(_blocksPanel.transform);
+
+                _currentBlocksCount++;
             }
         }
+        yield return new WaitForSecondsRealtime(0.05f);
+
+        SendBlocksCount();
     }
     
+    private void SendBlocksCount()
+    {
+        onBlocksCreated.Invoke(_currentBlocksCount);
+
+        _currentBlocksCount = 0;
+    }
     void Start()
     {
-        LoadLevel("level1.1");
+        LoadLevel($"{_currentPack}{_currentLevel}");
     }
 }

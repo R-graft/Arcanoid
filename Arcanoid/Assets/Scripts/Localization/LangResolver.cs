@@ -1,47 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using System.Text.RegularExpressions;
 
-public class LangResolver : MonoBehaviour
+public class LangResolver : MonoBehaviour 
 {
-    private Dictionary<string, string> _langDictionary;
+    protected static Dictionary<string, string> LangDictionary { get; private set; }
 
-    private TextIgentifier[] _allIdentifiers;
+    protected static Languages Currentlanguage { get; private set; }
 
-    private Dictionary<TextMeshProUGUI, string> _allTexts;
-
-    Languages _currentlanguage;
-
-    void Awake()
+    private void Awake()
     {
-        LoadAllTextObjects();
-    }
-    private void LoadAllTextObjects()
-    {
-        _langDictionary = new Dictionary<string, string>();
+        LangDictionary = new Dictionary<string, string>();
 
-        _allTexts = new Dictionary<TextMeshProUGUI, string>();
-
-        _allIdentifiers = Resources.FindObjectsOfTypeAll<TextIgentifier>();
-
-        foreach (TextIgentifier langText in _allIdentifiers)
-        {
-            _allTexts.Add(langText.GetComponent<TextMeshProUGUI>(), langText.identifier);
-        }
+        ChangeLang(Currentlanguage);
     }
 
-    private void ReadProperties(Languages lang)
+    private void ReadProperties()
     {
-        _langDictionary.Clear();
+        LangDictionary.Clear();
 
-        _currentlanguage = lang;
-
-        TextAsset file = Resources.Load<TextAsset>($"Localization/{_currentlanguage}");
+        TextAsset file = Resources.Load<TextAsset>($"Localization/{Currentlanguage}");
 
         if (file == null)
         {
-            _currentlanguage = Languages.English;
+            Currentlanguage = Languages.English;
 
             file = Resources.Load<TextAsset>($"Localization/{Languages.English}");
         }
@@ -50,21 +31,16 @@ public class LangResolver : MonoBehaviour
         {
             var prop = line.Split('=');
 
-            _langDictionary.Add(prop[0], prop[1]);
+            LangDictionary.Add(prop[0], prop[1]);
         }
-       
+
+        Events.langChanged.Invoke();
     }
-    private void ResolveTexts()
-    {
-        foreach (var langText in _allTexts)
-        {
-            langText.Key.text = Regex.Unescape(_langDictionary[langText.Value]);
-        }
-    }
+
     public void ChangeLang(Languages lang)
     {
-        ReadProperties(lang);
+        Currentlanguage = lang;
 
-        ResolveTexts();
+        ReadProperties();
     }
 }

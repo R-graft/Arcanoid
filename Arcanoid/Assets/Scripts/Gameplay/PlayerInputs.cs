@@ -3,9 +3,8 @@ using System;
 
 public class PlayerInputs : MonoBehaviour
 {
-    public static event Action<float> OnMove;
-
-    private float _inputDirection = 0;
+    [HideInInspector]
+    public float _inputDirection;
 
     private Camera _camera;
 
@@ -18,8 +17,6 @@ public class PlayerInputs : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             _inputDirection = _camera.ScreenToWorldPoint(Input.mousePosition).x;
-
-            OnMove?.Invoke(_inputDirection);
         }
     }
 }
