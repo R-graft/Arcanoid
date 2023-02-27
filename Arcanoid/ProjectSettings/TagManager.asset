@@ -5,7 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - edge
+  - platform
   - block
+  - downEdge
+  - testTile
   layers:
   - Default
   - TransparentFX
@@ -13,9 +16,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - ball
+  - bonus
+  - bullet
   - 
   - 
   - 
@@ -42,4 +45,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BackUI
+    uniqueID: 1595043487
+    locked: 0
+  - name: blocks
+    uniqueID: 1925379225
+    locked: 0
+  - name: bonus
+    uniqueID: 814975077
+    locked: 0
+  - name: player
+    uniqueID: 638073701
+    locked: 0
+  - name: UI
+    uniqueID: 4223213933
     locked: 0
