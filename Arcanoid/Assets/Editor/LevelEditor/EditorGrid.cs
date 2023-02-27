@@ -11,9 +11,9 @@ public class EditorGrid : MonoBehaviour
 
     private const int _linesCount = 10;
 
-    private const float _heightOffset = 0.87f;
+    private const float _heightOffset = 0.81f;
 
-    private const float _widthOffset = 0.03f;
+    private const float _widthOffset = 0.1f;
 
     public  List<GameObject> _testTiles;
     public EditorGrid(GameObject testTile)

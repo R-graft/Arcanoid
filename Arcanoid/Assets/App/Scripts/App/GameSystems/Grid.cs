@@ -9,9 +9,9 @@ public class Grid : MonoBehaviour
 
     private const int _linesCount = 10;
 
-    private const float _heightOffset = 0.87f;
+    private const float _heightOffset = 0.83f;
 
-    private const float _widthOffset = 0.03f;
+    private const float _widthOffset = 0.05f;
 
     public Dictionary<(int,int), Vector2> gridPositions = new Dictionary<(int, int), Vector2>();
 

@@ -1,38 +1,61 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
 {
     [SerializeField]
-    private UIWindow _win;
+    private UIWindow<GameUI> _win;
     [SerializeField]
-    private UIWindow _lose;
+    private UIWindow<GameUI> _lose;
     [SerializeField]
-    private UIWindow _pause;
+    private UIWindow<GameUI> _pause;
     [SerializeField]
-    private UIWindow _gameOver;
+    private UIWindow<GameUI> _gameOver;
 
-    private void Awake()
+    [SerializeField]
+    private ButtonElement _pauseButton;
+
+    [SerializeField]
+    private List<Sprite> _gameBackgroundsList;
+
+    [SerializeField]
+    private Image _backGround;
+
+    public Action OnStart;
+
+    public Action OnReStart;
+
+    public Action OnPause;
+
+    public Action OnSceneLoad = delegate { ScenesManager.Instance.LoadScene(SCENELIST.PackScene); } ;
+
+    public void Init()
     {
-        _win.HideWindow();
-        _lose.HideWindow();
-        _pause.HideWindow();
-        _gameOver.HideWindow();
+        _win.InitWindow(this);
+        _lose.InitWindow(this);
+        _gameOver.InitWindow(this);
+        _pause.InitWindow(this);
+
+        _pauseButton.SetDownAction(OnPause, true);
+
+        _backGround.sprite = _gameBackgroundsList[GameProgressController.Instance.PacksController.GetCurrentPack().packIndex];
     }
-    public void OnWin()
-    {
-        _win.InitWindow();
 
+    public void GameUiWin()
+    {
         _win.ShowWindow();
     }
-    public void OnLose()
+    public void GameUiLose()
     {
         _lose.ShowWindow();
     }
-    public void OnPause()
+    public void GameUiPause()
     {
         _pause.ShowWindow();
     }
-    public void OnGameOver()
+    public void GameUiGameOver()
     {
         _gameOver.ShowWindow();
     }

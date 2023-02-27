@@ -4,45 +4,17 @@ using UnityEngine.UI;
 
 public class PackView : MonoBehaviour
 {
-    [SerializeField]
-    private TextMeshProUGUI _packTitle;
+    public TextMeshProUGUI packTitle;
 
-    [SerializeField]
-    private Image _packIcon;
+    public Image packIcon;
 
-    [SerializeField]
-    private Sprite _closedPackIcon;
+    public Image packBackground;
 
-    [SerializeField]
-    private Image _packBackground;
+    public PackButton packButton;
 
-    [SerializeField]
-    private Button _packButton;
+    public TextMeshProUGUI currentLevel;
 
-    [SerializeField]
-    private TextMeshProUGUI _currentLevel;
+    public TextMeshProUGUI LevelsInPack;
 
-    [SerializeField]
-    private TextMeshProUGUI _maxLevel;
-
-    [SerializeField]
-    private int _packIndex;
-
-    public void SetInterface(Pack pack)
-    {
-        _packTitle.text = pack.title;
-
-        _packIcon.sprite = pack.isOpen ? pack.sprite : _closedPackIcon;
-
-        _currentLevel.text = pack.EndedLevel.ToString();
-
-        _maxLevel.text = (pack.finishLevel - pack.startLevel + 1).ToString();
-    }
-
-    public void SetStatus(bool isOpen)
-    {
-        _packButton.interactable = isOpen;
-
-        _packBackground.color = isOpen ? Color.green : Color.red;
-    }
+    public int packIndex;
 }

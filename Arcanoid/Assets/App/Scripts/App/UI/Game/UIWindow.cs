@@ -1,18 +1,26 @@
+using DG.Tweening;
 using UnityEngine;
 
 [System.Serializable]
-public abstract class UIWindow : MonoBehaviour
+public abstract class UIWindow<T> : MonoBehaviour, IAnimatedElement
 {
-    public virtual void InitWindow()
-    {
-    }
+    public abstract void InitWindow(T UIParent);
 
-    public void ShowWindow()
+    public virtual void ShowWindow() => InAnimation();
+
+    public virtual void HideWindow() => OutAnimation();
+
+    public virtual void InAnimation()
     {
         gameObject.SetActive(true);
+
+        DOTween.Sequence().Append(transform.DOMoveY(4, 0.1f)).Append(transform.DOMoveY(5, 0.1f));
     }
-    public void HideWindow()
+
+    public virtual void OutAnimation()
     {
-        gameObject.SetActive(false);
+        DOTween.Sequence().Append(transform.DOMoveY(4, 0.1f)).Append(transform.DOMoveY(15, 0.1f)).
+        AppendCallback(()=> gameObject.SetActive(false));
     }
+
 }

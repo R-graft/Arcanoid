@@ -4,39 +4,33 @@ using System.Collections.Generic;
 public class SpawnSystem : MonoBehaviour
 {
     [SerializeField]
-    private BlocksData blocksData;
+    private BlocksData _blocksData;
 
     [SerializeField]
-    private GridSystem _gridSystem;
+    private BlocksSystem _blockSystem;
 
-    public static Dictionary<string, ObjectPool<Block>> _pools;
-
-    public static Dictionary<string, AbstractFactory<Block>> _factories;
-
-    private bool IsInited;
+    public static Dictionary<BlocksList, ObjectPool<Block>> Pools { get; private set; }
+    
+    public Dictionary<BlocksList, AbstractFactory<Block>> factories;
 
     public void Init()
     {
-        if (!IsInited)
-        {
-            SpawnBlocks();
-
-            IsInited = true;
-        }
+        SpawnBlocks();
     }
     private void SpawnBlocks()
 	{
-        _pools = new Dictionary<string, ObjectPool<Block>>();
+        Pools = new Dictionary<BlocksList, ObjectPool<Block>>();
 
-        _factories = new Dictionary<string, AbstractFactory<Block>>();
+        factories = new Dictionary<BlocksList, AbstractFactory<Block>>();
 
-        foreach (var block in blocksData.blocksTypes)
+        foreach (var block in _blocksData.blocksTypes)
         {
-            AbstractFactory<Block> factory = new FactoryBlock<Block>(block, _gridSystem);
+            AbstractFactory<Block> factory = new FactoryBlock<Block>(block, _blockSystem);
 
-            _factories.Add(block.blockId.ToString(), factory);
+            factories.Add(block.blockId, factory);
 
-            ObjectPool<Block> pool = new ObjectPool<Block>(block.PoolOnCreateNewBlock, block => block.PoolOnCreate(block), block => block.PoolOnGet(block));
+            ObjectPool<Block> pool = new ObjectPool<Block>(() => PoolOnCreateNewBlock(block), PoolOnCreate,
+                PoolOnGet, PoolOnDisable);
            
             for (int i = 0; i < block.poolSize; i++)
             {
@@ -44,7 +38,30 @@ public class SpawnSystem : MonoBehaviour
 
                 pool.Add(newObject);
             }
-            _pools.Add(block.blockId.ToString(), pool);
+            Pools.Add(block.blockId, pool);
         }
+    }
+    public void PoolOnGet(Block block)
+    {
+        block.gameObject.SetActive(true);
+
+        block.InAnimation();
+    }
+
+    public void PoolOnCreate(Block block)
+    {
+        block._blockSprite.size = Vector2.zero;
+
+        block.gameObject.SetActive(false);
+    }
+
+    public void PoolOnDisable(Block block)
+    {
+        block.OutAnimation();
+    }
+
+    public Block PoolOnCreateNewBlock(Block block)
+    {
+        return factories[block.blockId].CreateObject();
     }
 }

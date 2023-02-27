@@ -5,33 +5,39 @@ public class ObjectPool<T> where T : IPoolable
 {
     private Queue<T> _objectsQueue;
 
-    private Action<T> onGet;
+    private Action<T> OnGet;
 
-    private Action<T> onCreate;
+    private Action<T> OnCreate;
 
-    private Action onGetNewObject;
+    private Func<T> OnGetNewObject;
 
-    public ObjectPool(Action onGetNew, Action<T> onCreate, Action<T> onGet)
+    private Action<T> OnDisableObject;
+
+    public ObjectPool(Func<T> onGetNewObject, Action<T> onCreate, Action<T> onGet, Action<T> OnDisable)
     {
         _objectsQueue = new Queue<T>();
 
-        this.onGetNewObject = onGetNew;
+        OnGetNewObject = onGetNewObject;
 
-        this.onGet = onGet;
+        OnCreate = onCreate;
 
-        this.onCreate = onCreate;
+        OnGet = onGet;
+
+        OnDisableObject = OnDisable;
     }
 
     public void CreatePoolObject()
     {
-        onGetNewObject();
+        T newObject = OnGetNewObject();
+
+        Add(newObject);
     }
 
     public void Add(T addedObject)
     {
         _objectsQueue.Enqueue(addedObject);
 
-        onCreate(addedObject);
+        OnCreate(addedObject);
     }
     public T Get()
     {
@@ -42,8 +48,14 @@ public class ObjectPool<T> where T : IPoolable
 
         T spawnObject = _objectsQueue.Dequeue();
 
-        onGet(spawnObject);
+        OnGet(spawnObject);
 
         return spawnObject;
+    }
+    public void Disable(T disabledObject)
+    {
+        _objectsQueue.Enqueue(disabledObject);
+
+        OnDisableObject(disabledObject);
     }
 }

@@ -6,43 +6,58 @@ public class PackViewManager : MonoBehaviour
     private PackView[] _packViews;
 
     [SerializeField]
-    private PacksData _packsData;
+    private Sprite _closedPackIcon;
+
+    [SerializeField]
+    private Sprite _closedPackBackground;
 
     [SerializeField]
     private RectTransform _content;
 
-    private const int MinEnergyForStart = 3;
-
-    private void Awake()
+    public void Init()
     {
         SetPacksView();
     }
 
+    public void SetInterface(Pack packModel, PackView pack)
+    {
+        pack.packTitle.text = packModel.title;
+
+        pack.packIcon.sprite = packModel.isOpen ? packModel.sprite : _closedPackIcon;
+
+        pack.currentLevel.text = packModel.EndedLevel.ToString();
+
+        pack.LevelsInPack.text = (packModel.finishLevel - packModel.startLevel + 1).ToString();
+
+        pack.packBackground.sprite = packModel.isOpen ? pack.packBackground.sprite : _closedPackBackground;
+
+        if (packModel.isOpen)
+            pack.packButton.SetDownAction(() => SetCurrentPack(pack.packIndex), true);
+
+    }
+
     public void SetPacksView()
     {
-        for (int i = 0; i < _packsData.packsModels.Length; i++)
+        if (!GameProgressController.Instance)
+            return;
+        
+        var packModels = GameProgressController.Instance.PacksController.PacksModels;
+
+        for (int i = 0; i < packModels.Length; i++)
         {
-            _packViews[i].SetInterface(_packsData.packsModels[i]);
-
-            _packViews[i].SetStatus(_packsData.packsModels[i].isOpen);
-
-            if (!_packsData.packsModels[i].isOpen && _packsData.packsModels[i-1].isOpen)
+            if (packModels[i].packIndex == _packViews[i].packIndex)
             {
-                SetScrollContentPosition(i - 1);
+                SetInterface(packModels[i], _packViews[i]);
             }
         }
     }
-    public void SetPack(int index)
+    public void SetCurrentPack(int index)
     {
-        if (GameProgressController.instance.Energy >= MinEnergyForStart)
+        if (GameProgressController.Instance.GameAccess)
         {
-            GameProgressController.OnSetPack.Invoke(index);
+            GameProgressController.Instance.SetDataFromVeiw(index);
 
-            ScenesManager.instance.LoadScene(SCENELIST.GameScene);
-        }
-        else
-        {
-            return;
+            ScenesManager.Instance.LoadScene(SCENELIST.GameScene);
         }
     }
 

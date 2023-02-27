@@ -1,33 +1,38 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class GameOverWindow : UIWindow
+public class GameOverWindow : UIWindow<GameUI>
 {
     [SerializeField]
-    private Button _continueButton;
+    private ButtonElement _continueButton;
+
+    [SerializeField]
+    private ButtonElement _exitButton;
 
     private const int EnergyForContinue = 5;
 
-    public override void InitWindow()
+    private const int ExtraLives = 1;
+
+    public override void InitWindow(GameUI uiParent)
     {
-        if (GameProgressController.instance.Energy >= EnergyForContinue)
-        {
-            _continueButton.enabled = true;
-        }
-        else
-        {
-            _continueButton.enabled = false;
-        }
+        _continueButton.SetDownAction(OnButtonContinueWihEnergy, true);
+        _continueButton.SetDownAction(uiParent.OnReStart, true);
+
+        _continueButton.SetUpAction(HideWindow, true);
+
+        _exitButton.SetDownAction(uiParent.OnSceneLoad, true);
     }
-    public void OnButtonExitToMenu()
+
+    public override void ShowWindow()
     {
-        Events.LoadScene.Invoke(SCENELIST.PackScene);
+        base.ShowWindow();
+
+        _continueButton.gameObject.SetActive(GameProgressController.Instance.EnergyCounter.GetEnergy() >= EnergyForContinue);
     }
 
     public void OnButtonContinueWihEnergy()
     {
-        GameplaySystem.ChangeLives.Invoke(1, true);
+        GameProgressController.Instance.SetEnergy(EnergyForContinue, false);
 
-        GameProgressController.OnSetEnergy.Invoke(false, EnergyForContinue);
+        BonusEvents.OnSetLives.Invoke(ExtraLives, true);
     }
 }

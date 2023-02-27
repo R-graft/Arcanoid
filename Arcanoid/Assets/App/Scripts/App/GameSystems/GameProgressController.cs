@@ -8,53 +8,61 @@ public class GameProgressController : Singleton<GameProgressController>
 
     private GameProgressData CurrentProgressData;
 
-    private PackDataController _packsController;
+    public PackDataController PacksController { get; private set; }
+
+    public EnergyCounter EnergyCounter { get; private set; }
 
     public int Level { get; private set; }
 
-    public int Energy;
-    public int PackIndex { get; private set; }
+    public bool GameAccess { get { return EnergyCounter.SetGameAsses(); } }
 
-    public static Action<int> OnSetPack;
-
-    public static Action<bool, int> OnSetEnergy;
-
-    public static Action OnPassLevel;
-
-    private const string gameProgessDataFilePath = "/App/Resources/Data/GameProgressData/GameProgress.json";
-
-    private const string savingDataFilePath = "/App/Resources/Data/GameProgressData";
+    private readonly string gameProgessDataFile = "/GameProgress.json";
 
     public void Init()
     {
         SingleInit();
 
-        _packsController = new PackDataController(_packsDataObject.packsModels, PackIndex);
+        PacksController = new PackDataController(_packsDataObject.packsModels);
 
-        LoadProgressData();
+        EnergyCounter = new EnergyCounter();
+
+        Load();
     }
-
-    public void SetDataFromVeiw(int packIndex)
-    {
-        Level = _packsController.GetLevelFrowView(packIndex).level;
-
-        PackIndex = _packsController.GetLevelFrowView(packIndex).pack;
-
-        SaveProgressData();
-    }
-
     public void PassLevel()
     {
         Level++;
 
-        PackIndex = _packsController.OnLevelPass(Level);
+        PacksController.LevelPass(Level);
 
-        SaveProgressData();
+        EnergyCounter.LevelPass();
+
+        Save();
+    }
+    public void LoadLevel()
+    {
+        EnergyCounter.LoadLevel();
+
+        Save();
+    }
+    public void SetEnergy(int value, bool isIncrease)
+    {
+        EnergyCounter.ChangeEnergyValue(value, isIncrease);
+
+        Save();
     }
 
-    private void LoadProgressData()
+    public void SetDataFromVeiw(int packIndex)
     {
-        CurrentProgressData = new DataReader<GameProgressData>(gameProgessDataFilePath).ReadFile();
+        PacksController.SetLevelFrowView(packIndex);
+
+        Level = PacksController.GetGlobalLevel();
+
+        Save();
+    }
+
+    private void Load()
+    {
+        CurrentProgressData = new DataReader<GameProgressData>(gameProgessDataFile).ReadFileFromSystem();
 
         if (CurrentProgressData == null)
         {
@@ -65,73 +73,58 @@ public class GameProgressController : Singleton<GameProgressController>
 
         Level = CurrentProgressData.currentLevel;
 
-        PackIndex = CurrentProgressData.currentPackIndex;
+        EnergyCounter.Load(CurrentProgressData.currentEnergy, CurrentProgressData.lastData);
 
-        Energy = LoadEnergy(CurrentProgressData.currentEnergy, CurrentProgressData.lastData);
+        PacksController.Load(CurrentProgressData.packsDatas, Level);
 
-        SaveProgressData();
+        Save();
     }
 
-    private void SaveProgressData()
+    private void Save()
     {
         CurrentProgressData.currentLevel = Level;
 
-        CurrentProgressData.currentEnergy = Energy;
+        CurrentProgressData.currentEnergy = EnergyCounter.GetEnergy();
 
-        CurrentProgressData.currentPackIndex = PackIndex;
+        PacksController.Save(CurrentProgressData.packsDatas);
 
         CurrentProgressData.lastData = DateTime.Now.ToFileTime();
 
         DataWriter<GameProgressData> currentWriter =
-            new DataWriter<GameProgressData>(savingDataFilePath, CurrentProgressData, gameProgessDataFilePath);
+            new DataWriter<GameProgressData>(CurrentProgressData, gameProgessDataFile);
 
-        currentWriter.SaveFile();
+        currentWriter.SaveFileToSystem();
     }
 
     private void SetDefaultProgress()
     {
         CurrentProgressData = new GameProgressData();
 
-        Energy = 10;
+        EnergyCounter.SetDefaultEnergy();
 
         Level = 1;
 
-        PackIndex = _packsController.SetPackDataToDefault();
+        PacksController.SetPackDataToDefault(CurrentProgressData);
 
-        SaveProgressData();
+        Save();
     }
 
-    private void SetEnergy(bool isIncrement, int energyValue)
-    {
-        Energy = isIncrement ? Energy += energyValue : Energy -= energyValue;
-
-        SaveProgressData();
-    }
-
-    private int LoadEnergy(int lastEnergyLavue, long lastSavingDate)
-    {
-        var savingDate = DateTime.FromFileTime(lastSavingDate);
-
-        return lastEnergyLavue += DateTime.Now.Subtract(savingDate).Hours;
-    }
-
-    private void OnEnable()
-    {
-        OnSetEnergy += SetEnergy;
-        OnPassLevel += PassLevel;
-        OnSetPack += SetDataFromVeiw;
-    }
-
-    private void OnDisable()
-    {
-        OnSetEnergy -= SetEnergy;
-        OnPassLevel -= PassLevel;
-        OnSetPack -= SetDataFromVeiw;
-    }
     private void OnApplicationPause()
     {
 #if PLATFORM_ANDROID
         PlayerPrefs.DeleteKey("FirstIn");
 #endif
     }
+}
+
+[System.Serializable]
+public class GameProgressData
+{
+    public int currentLevel;
+
+    public int currentEnergy;
+
+    public long lastData;
+
+    public PackSaveData[] packsDatas;
 }

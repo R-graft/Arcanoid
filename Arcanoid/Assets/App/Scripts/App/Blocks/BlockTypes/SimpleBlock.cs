@@ -6,28 +6,31 @@ public class SimpleBlock : Block, IDamageable
     private ColoredBlock _coloredBlock;
 
     [SerializeField]
-    public int health;
-    public int HealthCount { get => health; set => health = value; }
+    private int health;
+    public override int HealthCount { get; set; }
 
-    public void InDamage(int damageValue)
+    public override void InDamage(int damageValue)
     {
         HealthCount-= damageValue;
 
-        if (health <= 0)
+        if (HealthCount <= 0)
         {
             InDestroy();
         }
 
         else
         {
-            _coloredBlock.SetColorOnDamage(HealthCount);
+            base.InDamage(damageValue);
+
+            _coloredBlock.SetColor(_blockSprite, HealthCount);
         }
     }
-
-    public void InDestroy()
+    public override void InAnimation()
     {
-        PoolOnDisable(this);
+        base.InAnimation();
 
-        Events.blockDestroyed.Invoke(this);
+        HealthCount = health;
+
+        _coloredBlock.SetColor(_blockSprite, HealthCount);
     }
 }

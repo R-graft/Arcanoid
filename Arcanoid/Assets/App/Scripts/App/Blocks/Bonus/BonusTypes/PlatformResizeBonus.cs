@@ -7,17 +7,15 @@ public class PlatformResizeBonus : Bonus
     public override void Apply()
     {
         Resize();
-
-        StartTimer();
     }
 
     public override void Remove()
     {
-        PlatformController.ResizePlatform.Invoke(-resizeValue);
+        BonusEvents.OnResizePlatform?.Invoke(-resizeValue);
     }
 
     private void Resize()
     {
-        PlatformController.ResizePlatform.Invoke(resizeValue);
+        BonusEvents.OnResizePlatform?.Invoke(resizeValue);
     }
 }

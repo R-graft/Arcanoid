@@ -2,8 +2,20 @@ using UnityEngine;
 
 public class PackUI : MonoBehaviour
 {
-    public void OnButtonToMenu()
+    [SerializeField]
+    private ButtonElement _homeButton;
+
+    [SerializeField]
+    private PackViewManager _viewManager;
+
+    private void Awake()
     {
-        Events.LoadScene.Invoke(SCENELIST.StartScene);
+        Init();
+    }
+    public void Init()
+    {
+        _viewManager.Init();
+
+        _homeButton.SetDownAction(()=> ScenesManager.Instance.LoadScene(SCENELIST.StartScene), true);
     }
 }

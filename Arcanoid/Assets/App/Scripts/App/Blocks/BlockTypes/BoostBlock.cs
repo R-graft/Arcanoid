@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class BoostBlock : Block
+public class BoostBlock : Block, IDamageable
 {
     [SerializeField]
     private int health;
 
-    public int HealthCount { get => health; set => health = value; }
+    public override int HealthCount { get; set; }
 
-    public void InDamage(int damageValue)
+    public override void InDamage(int damageValue)
     {
         HealthCount -= damageValue;
 
@@ -18,20 +18,27 @@ public class BoostBlock : Block
 
         else
         {
-           BoostEffect();
+            base.InDamage(damageValue);
+
+            BoostEffect();
         }
     }
 
-    public void InDestroy()
+    public override void InDestroy()
     {
+        base.InDestroy();
+
         BoostEffect();
+    }
 
-        PoolOnDisable(this);
+    public override void InAnimation()
+    {
+        base.InAnimation();
 
-        Events.blockDestroyed.Invoke(this);
+        HealthCount = health;
     }
 
     public virtual void BoostEffect()
-    { 
+    {
     }
 }

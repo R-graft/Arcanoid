@@ -8,8 +8,6 @@ public class PacksData : ScriptableObject
 [System.Serializable]
 public class Pack
 {
-    public string titleId;
-
     public string title;
 
     public int packIndex;

@@ -3,19 +3,21 @@ public class FactoryBlock<T> : AbstractFactory<T> where T : Block
 {
     private T _creatingObject;
 
-    private GridSystem _grid;
-    public FactoryBlock(T currentObject, GridSystem grid)
+    private BlocksSystem _blocksController;
+    public FactoryBlock(T currentBlockType, BlocksSystem controller)
     {
-        _creatingObject = currentObject;
+        _creatingObject = currentBlockType;
 
-        _grid = grid;
+        _blocksController = controller;
     }
 
     public override T CreateObject()
     {
-        var creatingObject = Instantiate(_creatingObject, _grid.transform);
+        var creatingBlock = Instantiate(_creatingObject, _blocksController.transform);
 
-        return creatingObject;
+        creatingBlock._blocksSystem = _blocksController;
+
+        return creatingBlock;
     }
 }
     

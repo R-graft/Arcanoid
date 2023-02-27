@@ -3,21 +3,43 @@ using UnityEngine;
 
 public class MenuUI : MonoBehaviour
 {
-    public void OnbuttonStartGame()
-    {
-        if (PlayerPrefs.HasKey("FirstIn"))
-        {
-            Events.LoadScene.Invoke(SCENELIST.PackScene);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("FirstIn", default);
+    [SerializeField]
+    private UIWindow<MenuUI> _settingsWindow;
 
-            Events.LoadScene.Invoke(SCENELIST.GameScene);
-        }
+    [SerializeField]
+    private UIWindow<MenuUI> _startWindow;
+
+    public void Init()
+    {
+        _settingsWindow.InitWindow(this);
+
+        _startWindow.InitWindow(this);
+
+        _startWindow.ShowWindow();
     }
 
-    public void OnButtonExitApplication()
+    public void StartGame()
+    {
+        if (GameProgressController.Instance.GameAccess)
+        {
+            if (PlayerPrefs.HasKey("FirstIn"))
+            {
+                ScenesManager.Instance.LoadScene(SCENELIST.PackScene);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("FirstIn", default);
+
+                ScenesManager.Instance.LoadScene(SCENELIST.GameScene);
+            }
+        }
+
+        return;
+    }
+
+    public void ShowSettingsWindow() => _settingsWindow.ShowWindow();
+
+    public void ExitApplication()
     {
 #if UNITY_EDITOR
         PlayerPrefs.DeleteKey("FirstIn");
@@ -25,7 +47,8 @@ public class MenuUI : MonoBehaviour
 #endif
 #if PLATFORM_ANDROID
         PlayerPrefs.DeleteKey("FirstIn");
-		Application.Quit();
+        Application.Quit();
 #endif
     }
 }
+

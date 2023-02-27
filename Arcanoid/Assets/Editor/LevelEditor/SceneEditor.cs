@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 
-
 public class SceneEditor : EditorWindow
 {
     private LevelEditor _lEditor;
@@ -35,7 +34,7 @@ public class SceneEditor : EditorWindow
 
     private void CreateCurrentBlock(Collider2D collider)
     {
-        Block newBlock = Instantiate(_lEditor.editorData.blocksTypes[_lEditor.index], _parent);
+        Block newBlock = Instantiate(_lEditor.editorBlocksData.editorData[_lEditor.index].block, _parent);
 
         newBlock.transform.position = collider.transform.position;
 

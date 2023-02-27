@@ -1,16 +1,15 @@
 using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
-{
-    public static T instance { get; set; }
+{    public static T Instance { get; set; }
 
     public void SingleInit()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = (T)(object)this;
+            Instance = (T)(object)this;
         }
-        else if (instance != null)
+        else if (Instance != null)
         {
             Destroy(gameObject);
         }

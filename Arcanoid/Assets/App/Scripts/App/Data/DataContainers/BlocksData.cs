@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BlocksDataObject", menuName = "Data/newBlocksDataObject")]
+[CreateAssetMenu(fileName = "BlocksData", menuName = "Data/newBlocksData")]
 public class BlocksData : ScriptableObject
 {
     public Block[] blocksTypes;

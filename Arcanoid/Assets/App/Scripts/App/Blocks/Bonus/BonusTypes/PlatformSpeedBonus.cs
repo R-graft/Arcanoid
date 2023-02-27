@@ -1,20 +1,21 @@
 public class PlatformSpeedBonus : Bonus
 {
     public bool isSpeedUp;
+
+    public float speedValue;
     public override void Apply()
     {
         Resize();
-
-        StartTimer();
     }
 
     public override void Remove()
     {
-        PlatformController.SetPlatformSpeed.Invoke(!isSpeedUp);
+        BonusEvents.OnSetPlatformSpeed?.Invoke(!isSpeedUp, speedValue);
+
     }
 
     private void Resize()
     {
-        PlatformController.SetPlatformSpeed.Invoke(isSpeedUp);
+        BonusEvents.OnSetPlatformSpeed?.Invoke(isSpeedUp, speedValue);
     }
 }

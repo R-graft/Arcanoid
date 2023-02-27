@@ -1,68 +1,74 @@
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Inputs : MonoBehaviour
+public class Inputs : Singleton<Inputs>
 {
+    [SerializeField]
+    private EventSystem _eventSystem;
+
     private const float _inputConstrainterY = 0;
 
-    public float _inputPositionX;
+    public static Action<float> _inputPositionX;
 
-    public bool isMouseButton;
+    public static Action OnMouseUp, OnMouseDown;
 
-    public bool isMouseUp;
+    public Camera _camera;
 
-    public bool isMouseDown;
+    private bool _updateButtons;
 
-    private Camera _camera;
-
-    private void Awake()
+    public void Init()
     {
-        _camera = Camera.main;
+        SingleInit();
+
+        _updateButtons = false;
     }
 
-    public void TurnOn()
+    public void TurnOff(bool allSystem)
     {
-        enabled = true;
+        if (allSystem)
+        {
+            _eventSystem.enabled = false;
+        }
+        _updateButtons = false;
     }
-    public void TurnOff()
+
+    public void TurnOn(bool allSystem)
     {
-        _inputPositionX = 0;
+        if (!_camera)
+        {
+            _camera = Camera.main;
+        }
 
-        isMouseButton = false;
-
-        isMouseUp = false;
-
-        isMouseDown = false;
-
-        enabled = false;
+        if (allSystem)
+        {
+            _eventSystem.enabled = true;
+        }
+        _updateButtons = true;
     }
+  
+    
     public void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (_updateButtons)
         {
-            if (_camera.ScreenToWorldPoint(Input.mousePosition).y < _inputConstrainterY)
+            if (Input.GetMouseButton(0))
             {
-                _inputPositionX = _camera.ScreenToWorldPoint(Input.mousePosition).x;
+                if (_camera.ScreenToWorldPoint(Input.mousePosition).y < _inputConstrainterY)
+                {
+                    _inputPositionX?.Invoke(_camera.ScreenToWorldPoint(Input.mousePosition).x);
+                }
+            }
 
-                isMouseButton = true;
+            if (Input.GetMouseButtonDown(0))
+            {
+                OnMouseDown?.Invoke();
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                OnMouseUp?.Invoke();
             }
         }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            isMouseDown = true;
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            isMouseUp = true;
-
-            isMouseButton = false;
-        }
-    }
-    private void LateUpdate()
-    {
-        isMouseButton = false;
-
-        isMouseDown = false;
     }
 }

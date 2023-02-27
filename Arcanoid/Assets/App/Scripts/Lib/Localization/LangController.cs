@@ -11,6 +11,10 @@ public class TextTranslator
     public Text t;
 
     public TMP_Text tMp;
+
+    public TMP_Text[] tMps;
+
+    public Text[] ts;
 }
 
 [System.Serializable]
@@ -70,7 +74,7 @@ public class LangController : MonoBehaviour
     {
         dictionary = new Dictionary<string, Word>();
 
-        if (translatesData != null)
+        if (translatesData)
         {
             foreach (var item in translatesData.words)
             {
@@ -90,15 +94,21 @@ public class LangController : MonoBehaviour
     }
     private void ReTranslateText(int langId)
     {
-        foreach (var item in _sceneTexts)
+        foreach (var text in _sceneTexts)
         {
-            if (item.t != null)
+            if (text.t != null)
+                text.t.text = dictionary[text.key].phrases[langId].phrase;
+            else if (text.tMp != null)
+                text.tMp.text = dictionary[text.key].phrases[langId].phrase;
+            else if (text.tMps != null)
             {
-                item.t.text = dictionary[item.key].phrases[langId].phrase;
+                foreach (var text_ in text.tMps)
+                    text_.text = dictionary[text.key].phrases[langId].phrase;
             }
-            else if (item.tMp != null)
+            else if(text.ts != null)
             {
-                item.tMp.text = dictionary[item.key].phrases[langId].phrase;
+                foreach (var text_ in text.ts)
+                    text_.text = dictionary[text.key].phrases[langId].phrase;
             }
         }
     }

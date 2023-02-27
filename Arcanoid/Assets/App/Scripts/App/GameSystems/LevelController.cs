@@ -1,135 +1,145 @@
-using System;
 using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
     [SerializeField]
-    private SpawnSystem _spawner;
+    private SpawnSystem _spawnSystem;
 
     [SerializeField]
-    private GameplaySystem _gameplay;
+    private BlocksSystem _blocksSystem;
 
     [SerializeField]
-    private PlayerSystem _player;
+    private PlatformController _platformController;
 
     [SerializeField]
-    private GridSystem _grid;
+    private BallsController _ballController;
 
     [SerializeField]
-    private GameUI _gameUI;
+    private BoostSystem _boostSystem;
 
-    private const int EnergyIncreaseValue = 4;
+    [SerializeField]
+    private GameFieldSystem _gamefieldSystem;
 
-    private const int EnergyDecreaseValue = 3;
+    [SerializeField]
+    private GamePanelController _gamePanelController;
 
-    private GAMESTATUSES _status;
+    [SerializeField]
+    private GameUI _GameUI;
 
-    public static Action<GAMESTATUSES> OnChangeGameState;
+    public Inputs _inputs;
 
     private void Awake()
     {
-        BeforeGameState();
+        SubscribeOnUI();
+
+        InitLevel();
     }
 
-    private void BeforeGameState()
+    private void InitLevel()
     {
-        _grid.Init();
+        _inputs = Inputs.Instance;
 
-        _spawner.Init();
+        _inputs.TurnOff(false);
 
-        var _levelData = new LevelDataLoader().GetCurrentLevelData();
+        _spawnSystem.Init();
 
-        var _arranger = new BlocksArranger(_levelData);
+        _blocksSystem.Init();
 
-        _arranger.ArrangeBlocks(_grid._gridWorldPositions);
+        _platformController.Init();
 
-        _gameplay.Init();
+        _ballController.Init();
 
-        GameProgressController.OnSetEnergy?.Invoke(false, EnergyDecreaseValue);
+        _gamefieldSystem.Init();
 
-        PlayGameState();
+        _GameUI.Init();
+
+        StartGame();
     }
 
-    private void PlayGameState()
+    public void StartGame()
     {
-        _player.Init();
+        GameProgressController.Instance.LoadLevel();
 
-        _player.TurnOnInputSystem();
+        _blocksSystem.StartSystem();
+
+        _gamePanelController.StartSystem();
+
+        _inputs.TurnOn(false);
     }
-    private void PauseState()
+
+    public void Restart()
+    {
+        _ballController.RestartSystem();
+
+        _platformController.RestartSystem();
+
+        _inputs.TurnOn(false);
+    }
+
+    
+    public void PauseGame()
     {
         if (Time.timeScale == 0)
-        {
-            Time.timeScale = 1;
-            _player.TurnOnInputSystem();
-        }
+            _inputs.TurnOn(false);
+
         else
         {
-            _player.TurnOffInputSystem();
-            _gameUI.OnPause();
-            Time.timeScale = 0;
+            _inputs.TurnOff(false);
+
+            _GameUI.GameUiPause();
         }
     }
 
-    private void LoseState()
+    public void Lose()
     {
-        _player.TurnOffInputSystem();
+        _inputs.TurnOff(false);
 
-        _gameUI.OnLose();
+        _ballController.StopBalls();
+
+        _boostSystem.StopSystem();
+
+        _gamePanelController.LivesCounter(1, false);
+
+        if (_gamePanelController.LivesCount == 0)
+            _GameUI.GameUiGameOver();
+        else
+            _GameUI.GameUiLose();
+    }
+    public void WinLevel()
+    {
+        GameProgressController.Instance.PassLevel();
+
+        _inputs.TurnOff(false);
+
+        _ballController.StopBalls();
+
+        _boostSystem.StopSystem();
+
+        _GameUI.GameUiWin();
     }
 
-    private void GameOverState()
+    private void SubscribeOnUI()
     {
-        _player.TurnOffInputSystem();
-
-        _gameUI.OnGameOver();
-    }
-
-    private void WinState()
-    {
-        _player.TurnOffInputSystem();
-
-        _player.SetStartState();
-
-        _gameUI.OnWin();
-
-        GameProgressController.OnSetEnergy?.Invoke(true, EnergyIncreaseValue);
-
-        GameProgressController.OnPassLevel?.Invoke();
-    }
-
-    public void ChangeState(GAMESTATUSES status)
-    {
-        _status = status;
-
-        switch (_status)
-        {
-            case GAMESTATUSES.BeforeStart:
-                BeforeGameState();
-                break;
-            case GAMESTATUSES.OnGame:
-                PlayGameState();
-                break;
-            case GAMESTATUSES.OnPaused:
-                PauseState();
-                break;
-            case GAMESTATUSES.OnLose:
-                LoseState();
-                break;
-            case GAMESTATUSES.OnWin:
-                WinState();
-                break;
-            case GAMESTATUSES.OnGameOver:
-                GameOverState();
-                break;
-        }
+        _GameUI.OnStart += StartGame;
+        _GameUI.OnReStart += Restart;
+        _GameUI.OnPause += PauseGame;
     }
     private void OnEnable()
     {
-        OnChangeGameState += ChangeState;
+        BlocksSystem.OnAllBlocksDestroyed += WinLevel;
+
+        BallsController.OnBallIsFall += Lose;
+
+        Time.timeScale = 1;
     }
     private void OnDisable()
     {
-        OnChangeGameState -= ChangeState;
+        _GameUI.OnStart -= StartGame;
+        _GameUI.OnReStart -= Restart;
+        _GameUI.OnPause -= PauseGame;
+
+        BlocksSystem.OnAllBlocksDestroyed -= WinLevel;
+
+        BallsController.OnBallIsFall -= Lose;
     }
 }

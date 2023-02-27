@@ -6,13 +6,13 @@ public class LevelDataLoader : MonoBehaviour
 
     public LevelData GetCurrentLevelData()
     {
-        if (GameProgressController.instance != null)
+        if (GameProgressController.Instance != null)
         {
-            _currentLevel = GameProgressController.instance.Level;
+            _currentLevel = GameProgressController.Instance.Level;
 
-            string _levelsFilesPath = $"/App/Resources/Data/Levels/{_currentLevel}.json";
+            string _levelsFilesPath = $"Data/Levels/{_currentLevel}";
 
-            return new DataReader<LevelData>(_levelsFilesPath).ReadFile();
+            return new DataReader<LevelData>(_levelsFilesPath).ReadFileFromResources();
         }
 
         Debug.Log("Game progress not exist");

@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class LevelEditor : EditorWindow
 {
-    public GameObject testTile;
+    private GameObject _testTile;
 
-    public Transform editorBlocksParent;
+    private Transform _editorBlocksParent;
 
-    public BlocksData editorData;
+    public EditorBlocksData editorBlocksData;
 
     private SceneEditor _sceneEditor;
 
@@ -42,16 +42,19 @@ public class LevelEditor : EditorWindow
             _sceneEditor = new SceneEditor();
         }
 
-        if (editorData == null)
+        if (!editorBlocksData)
         {
-            GUILayout.Label("EditorData");
-            editorData = (BlocksData)EditorGUILayout.ObjectField(editorData, typeof(BlocksData), true);
+            GUILayout.Label("EditorBlocksData");
+            editorBlocksData = (EditorBlocksData)EditorGUILayout.ObjectField(editorBlocksData,
+                typeof(EditorBlocksData), true);
+            return;
         }
 
-        if (testTile == null)
+        if (editorBlocksData && !_testTile)
         {
             GUILayout.Label("TestTilePrefab");
-            testTile = (GameObject)EditorGUILayout.ObjectField(testTile, typeof(GameObject), true);
+            _testTile = (GameObject)EditorGUILayout.ObjectField(_testTile, typeof(GameObject), true);
+            return;
         }
 
         else
@@ -72,21 +75,24 @@ public class LevelEditor : EditorWindow
                 index--;
                 if (index < 0)
                 {
-                    index = editorData.blocksTypes.Length - 1;
+                    index = editorBlocksData.editorData.Length - 1;
                 }
             }
             GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical();
             EditorGUILayout.Space(5);
-
-            GUILayout.Label(editorData.blocksTypes[index].blockId.ToString(), EditorStyles.boldLabel);
+            GUILayout.Label(editorBlocksData.editorData[index].block.blockId.ToString(), EditorStyles.boldLabel);
+            EditorGUILayout.Space(5);
+            GUILayout.Label(editorBlocksData.editorData[index].blockTexture, GUILayout.Height(50), GUILayout.Width(100));
 
             EditorGUILayout.Space(5);
+            GUILayout.EndVertical();
             GUILayout.FlexibleSpace();
 
             if (GUILayout.Button(">"))
             {
                 index++;
-                if (index > editorData.blocksTypes.Length - 1)
+                if (index > editorBlocksData.editorData.Length - 1)
                 {
                     index = 0;
                 }
@@ -107,11 +113,11 @@ public class LevelEditor : EditorWindow
 
                     SceneView.duringSceneGui += _sceneEditor.OnsceneGui;
 
-                    _sceneEditor.Init(this, editorBlocksParent);
+                    _sceneEditor.Init(this, _editorBlocksParent);
 
                     if (_editorGrid == null)
                     {
-                        _editorGrid = new EditorGrid(testTile);
+                        _editorGrid = new EditorGrid(_testTile);
                     }
 
                     _editorGrid.CreateGrid();
@@ -186,6 +192,11 @@ public class LevelEditor : EditorWindow
                             newData.blockIndexX.Add(int.Parse(indexes[0]));
 
                             newData.blockIndexY.Add(int.Parse(indexes[1]));
+
+                            if (Block.TryGetComponent(out IDamageable _))
+                            {
+                                newData.blocksCount++;
+                            }
                         }
 
                         var directory = Application.dataPath + $"/App/Resources/Data/Levels";
@@ -250,9 +261,9 @@ public class LevelEditor : EditorWindow
 
                         for (int i = 0; i < loadedLevel.blockTags.Count; i++)
                         {
-                            var obj = editorData.blocksTypes.First(o => o.blockId.ToString() == loadedLevel.blockTags[i]);
+                            var obj = editorBlocksData.editorData.First(o => o.block.blockId.ToString() == loadedLevel.blockTags[i]);
 
-                            var newblock = Instantiate(obj);
+                            var newblock = Instantiate(obj.block);
 
                             var tilePosition = loadedLevel.blockIndexX[i].ToString() + "," + loadedLevel.blockIndexY[i].ToString();
 

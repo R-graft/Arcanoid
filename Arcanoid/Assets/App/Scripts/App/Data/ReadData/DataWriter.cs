@@ -3,30 +3,44 @@ using UnityEngine;
 
 public class DataWriter<T>
 {
-    private string _directory;
-
     private T _dataFile;
 
-    private string _savingFilePath;
+    private string _savingFile;
 
-    public DataWriter(string directory, T dataFile, string savingFilePath)
+    public DataWriter(T dataFile, string savingFile)
     {
-        _directory = directory;
-
         _dataFile = dataFile;
 
-        _savingFilePath = savingFilePath;
+        _savingFile = savingFile;
     }
 
-    public void SaveFile()
+    public void SaveFileToSystem()
     {
-        var savePath = Application.dataPath + _directory;
+        var savePath = Application.persistentDataPath;
 
         if (Directory.Exists(savePath) && _dataFile != null)
         {
             string savingData = JsonUtility.ToJson(_dataFile);
 
-            string saveFilePath = Application.dataPath + _savingFilePath;
+            string saveFilePath = Application.persistentDataPath + _savingFile;
+
+            File.WriteAllText(saveFilePath, savingData);
+        }
+        else
+        {
+            Debug.Log("Error save file");
+        }
+    }
+
+    public void SaveFileToResources()
+    {
+        var savePath = Application.dataPath;
+
+        if (Directory.Exists(savePath) && _dataFile != null)
+        {
+            string savingData = JsonUtility.ToJson(_dataFile);
+
+            string saveFilePath = Application.persistentDataPath + _savingFile;
 
             File.WriteAllText(saveFilePath, savingData);
         }

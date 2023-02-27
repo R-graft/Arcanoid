@@ -9,11 +9,9 @@ public class DeadZone : MonoBehaviour
             Destroy(bonus.gameObject);
         }
 
-        if (collision.TryGetComponent(out Rigidbody2D rb))
+        if (collision.TryGetComponent(out Ball ball))
         {
-            BallsController.OnDestroyBall.Invoke(rb);
-
-            GameplaySystem.BallsCounter.Invoke(false);
+            BallsController.OnBallDestroy?.Invoke(ball);
         }
     }
 }

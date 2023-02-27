@@ -1,74 +1,56 @@
 using System;
 using UnityEngine;
 
-public class PlatformController :MonoBehaviour
+public class PlatformController : MonoBehaviour
 {
     [SerializeField]
-    private Transform _platformTransform;
+    private PlatformMove _platformMove;
 
-    [SerializeField]
-    private Inputs _inputs;
+    public static Func<Transform> OnGetTransform;
 
-    private float _moveConstrainterX;
+    private readonly Vector2 _startPlatformPosition = new Vector2(0, -3.2f);
 
-    private  float _moveSpeed = 0.5f;
-
-    private float _yPosition;
-
-    private float _scale;
-
-    public static Action<float> ResizePlatform;
-
-    public static Action<bool> SetPlatformSpeed;
-
-    public void Init(Vector2 startPos)
+    public void Init()
     {
-        transform.position = startPos;
+        _platformMove = Instantiate(_platformMove, transform);
 
-        _scale = _platformTransform.localScale.x / 2;
+        _platformMove.transform.position = _startPlatformPosition;
 
-        _yPosition = _platformTransform.position.y;
+        _platformMove.Init();
 
-        _moveConstrainterX = Camera.main.ScreenToWorldPoint(Vector2.zero).x;
-    }
-    private void FixedUpdate()
-    {
-        var _xDirection = Mathf.Clamp(_inputs._inputPositionX, _moveConstrainterX + _scale, -_moveConstrainterX - _scale);
-
-        var moveDirection = new Vector2(_xDirection, _yPosition);
-
-        _platformTransform.position = Vector2.MoveTowards(_platformTransform.position, moveDirection, _moveSpeed);
-    }
-    private void ChangeScale(float value)
-    {
-        _platformTransform.localScale = new Vector2(_platformTransform.localScale.x + value, _platformTransform.localScale.y);
-
-        _scale = _platformTransform.localScale.x / 2;
+        OnGetTransform += GetTransform;
     }
 
-    private void ChangeSpeed(bool isSpeedUp)
+    public void RestartSystem()
     {
-        if (isSpeedUp)
+        _platformMove.transform.position = _startPlatformPosition;
+
+        _platformMove.Init();
+    }
+    public void DestroyPlatform()
+    {
+        if (_platformMove)
         {
-            _moveSpeed *= 3;
-        }
-        else
-        {
-            _moveSpeed /= 3;
+            Inputs._inputPositionX -= _platformMove.Move;
+
+            Destroy(_platformMove.gameObject);
         }
     }
-    public Transform GetTransform()
-    {
-        return _platformTransform;
-    }
+
+    public Transform GetTransform() => _platformMove.transform;
+
     private void OnEnable()
     {
-        ResizePlatform += ChangeScale;
-        SetPlatformSpeed += ChangeSpeed;
+        BonusEvents.OnResizePlatform.AddListener(_platformMove.SetScale);
+        BonusEvents.OnSetPlatformSpeed.AddListener(_platformMove.SetSpeed);
+
+        Inputs._inputPositionX += _platformMove.Move;
     }
+
     private void OnDisable()
     {
-        ResizePlatform -= ChangeScale;
-        SetPlatformSpeed -= ChangeSpeed;
+        Inputs._inputPositionX -= _platformMove.Move;
+
+        OnGetTransform -= GetTransform;
     }
 }

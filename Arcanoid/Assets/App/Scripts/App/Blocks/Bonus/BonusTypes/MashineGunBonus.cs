@@ -7,37 +7,50 @@ public class MashineGunBonus : Bonus
     [SerializeField]
     private Bullet _prefab;
 
-    private List<Bullet> _bulletsPool;
+    private ObjectPool<Bullet> _bulletPool;
+
+    private List<Bullet> _bullets;
 
     private const int _bulletsPoolSize = 10;
 
-    private const float _offsetX = 0.45f;
+    private float _offsetX = 0.3f;
 
     private const float _offsetY = 0.2f;
 
     public override void Apply()
     {
         StartCoroutine(Shooting());
-
-        StartTimer();
     }
 
     public override void Remove()
     {
-        foreach (var item in _bulletsPool)
-        {
-            Destroy(item.gameObject);
-        }
+        StopAllCoroutines();
+
+        gameObject.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+
+        DestroyBullets();
     }
 
     private void OnEnable()
     {
-        _bulletsPool = new List<Bullet>();
+        _bullets = new List<Bullet>();
+
+        _bulletPool = new ObjectPool<Bullet>(() => CreateBullet(),
+            bullet => bullet.gameObject.SetActive(false),
+            bullet => bullet.gameObject.SetActive(true),
+            bullet => bullet.gameObject.SetActive(false));
 
         for (int i = 0; i < _bulletsPoolSize; i++)
         {
-            CreateBullet();
+            _bulletPool.CreatePoolObject();
         }
+
+        BonusEvents.OnResizePlatform.AddListener(OnSetScale);
     }
 
     private IEnumerator Shooting()
@@ -46,46 +59,42 @@ public class MashineGunBonus : Bonus
 
         while (count > 0)
         {
-            var bullet1 = GetBullet();
+            var position = PlatformController.OnGetTransform.Invoke().position;
 
-            bullet1.transform.position = new Vector2(transform.position.x + _offsetX, transform.position.y + _offsetY);
+            var bullet1 = _bulletPool.Get();
 
-            var bullet2 = GetBullet();
+            bullet1.transform.position = new Vector2(position.x + _offsetX, position.y + _offsetY);
 
-            bullet2.transform.position = new Vector2(transform.position.x - _offsetX, transform.position.y + _offsetY);
+            var bullet2 = _bulletPool.Get();
+
+            bullet2.transform.position = new Vector2(position.x - _offsetX, position.y + _offsetY);
 
             count--;
 
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSecondsRealtime(0.5f);
         }
 
         Remove();
     }
-
-    private Bullet GetBullet()
-    {
-        foreach (var item in _bulletsPool)
-        {
-            if (!item.isActiveAndEnabled)
-            {
-                item.gameObject.SetActive(true);
-
-                item.transform.parent = null;
-
-                return item;
-            }
-        }
-
-        CreateBullet();
-
-        return GetBullet();
-    }
-    private void CreateBullet()
+    private Bullet CreateBullet()
     {
         var newBullet = Instantiate(_prefab, transform);
 
-        newBullet.gameObject.SetActive(false);
+        newBullet.OnCeateBullet(_bulletPool);
 
-        _bulletsPool.Add(newBullet);
+        _bullets.Add(newBullet);
+
+        return newBullet;
+    }
+
+    private void DestroyBullets()
+    {
+        foreach (var item in _bullets)
+            Destroy(item.gameObject);
+    }
+
+    private void OnSetScale(float value)
+    {
+        _offsetX += value/2;
     }
 }

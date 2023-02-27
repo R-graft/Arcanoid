@@ -10,6 +10,7 @@ public class LangSwitcher : MonoBehaviour
     private int _langId;
 
     public static Action<int> OnLangSwitch;
+
     public void SetLanguage(TMP_Dropdown drop)
     {
         _langId = drop.value;
@@ -17,7 +18,7 @@ public class LangSwitcher : MonoBehaviour
         OnLangSwitch.Invoke(_langId);
     }
 
-    private void Awake()
+    public void Init()
     {
         _langId = PlayerPrefs.GetInt("CurrentLangIndex");
 

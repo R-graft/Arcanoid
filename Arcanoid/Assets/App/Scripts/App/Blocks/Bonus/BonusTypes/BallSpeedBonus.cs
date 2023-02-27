@@ -1,20 +1,21 @@
 public class BallSpeedBonus : Bonus
 {
     public bool isSpeedUp;
+
+    public int speedPercentValue;
+
     public override void Apply()
     {
         SwitchBallMode();
-
-        StartTimer();
     }
 
     public override void Remove()
     {
-        BallSpeedController.SwitchSpeed.Invoke(!isSpeedUp);
+        BonusEvents.OnBallSpeedBonus?.Invoke(!isSpeedUp, speedPercentValue);
     }
 
     private void SwitchBallMode()
     {
-        BallSpeedController.SwitchSpeed.Invoke(isSpeedUp);
+        BonusEvents.OnBallSpeedBonus?.Invoke(isSpeedUp, speedPercentValue);
     }
 }

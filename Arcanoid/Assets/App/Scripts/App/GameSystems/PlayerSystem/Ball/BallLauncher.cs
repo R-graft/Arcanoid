@@ -1,50 +1,45 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class BallLauncher : MonoBehaviour
+public class BallLauncher : MonoBehaviour , IPointerUpHandler, IPointerDownHandler
 {
-    private Rigidbody2D _ballRb;
+    public Rigidbody2D _ballRb;
 
-    private Transform _platformTransform;
+    public Transform _platformTransform;
 
-    private Inputs _input;
+    private const float BallDisposition = 0.9f;
 
-    private const float _ballDisposition = 0.9f;
+    private const float BallOffset = 0.2f;
 
-    private const float _ballOffset = 0.25f;
+    private const float StartForceIndex = 0.02f;
 
-    private const float _startForceIndex = 0.02f;
-
-    public void Init(Rigidbody2D ballRb, Transform platformTransform, Inputs input)
+    public void Init(Rigidbody2D ballRb, Transform platformTransform)
     {
         _ballRb = ballRb;
 
         _platformTransform = platformTransform;
-
-        _input = input;
-
-        StartCoroutine(LaunchBall());
     }
 
-    private IEnumerator LaunchBall()
+    private void Launch()
+    {
+        var startDirection = _ballRb.position.normalized;
+
+        _ballRb.AddForce(new Vector2(startDirection.x, - startDirection.y) * StartForceIndex);
+
+        gameObject.SetActive(false);
+    }
+    private IEnumerator FollowPlatform()
     {
         while (true)
         {
             yield return new WaitForFixedUpdate();
 
-            var startPosition = new Vector2((_platformTransform.position.x) / _ballDisposition, _platformTransform.position.y + _ballOffset);
-
-            _ballRb.position = startPosition;
-            
-
-            if (_input.isMouseUp)
-            {
-                var startDirection = -_ballRb.position.normalized;
-
-                _ballRb.AddForce(startDirection * _startForceIndex);
-
-                yield break;
-            }
+            _ballRb.position = new Vector2((_platformTransform.position.x) / BallDisposition,
+           _platformTransform.position.y + BallOffset);
         }
     }
+    public void OnPointerUp(PointerEventData eventData) => Launch();
+
+    public void OnPointerDown(PointerEventData eventData) => StartCoroutine(FollowPlatform());
 }

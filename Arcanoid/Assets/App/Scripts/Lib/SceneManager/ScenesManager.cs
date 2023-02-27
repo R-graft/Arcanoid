@@ -1,44 +1,56 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ScenesManager : Singleton<ScenesManager>
 {
-    public GameObject sceneTransition;
-
-    private float _transitionTime = 1.5f;
+    public GameObject loadPanelPrefab;
 
     private AsyncOperation _loadingScene;
 
+    public SCENELIST currentScene;
+
+    private float _minLoadingTime;
+
+    public static Action<SCENELIST> OnLoadScene;
 
     public void Init()
     {
         SingleInit();
-
-        Events.LoadScene.AddListener(LoadScene);
-
     }
     public void LoadScene(SCENELIST targetScene)
     {
+        currentScene = targetScene;
 
-        SceneManager.LoadSceneAsync(targetScene.ToString());
-        // StartCoroutine(SceneLoadCoroutine(targetScene));
+        StartCoroutine(SceneLoadCoroutine(targetScene));
     }
 
     private IEnumerator SceneLoadCoroutine(SCENELIST targetScene)
     {
-        GameObject transitionObject = Instantiate(sceneTransition);
+        _minLoadingTime = 0.8f;
 
-        yield return new WaitForSecondsRealtime(_transitionTime);
+        Instantiate(loadPanelPrefab);
 
         _loadingScene = SceneManager.LoadSceneAsync(targetScene.ToString());
 
-        while (!_loadingScene.isDone)
-        {
-            yield return null;
-        }
+        _loadingScene.allowSceneActivation = false;
 
-        Destroy(transitionObject);
+        while (_minLoadingTime > 0)
+        {
+            yield return new WaitForFixedUpdate();
+
+            _minLoadingTime -= Time.fixedDeltaTime;
+        }
+        
+        _loadingScene.allowSceneActivation = true;
+
+        OnLoadScene?.Invoke(currentScene);
     }
-   
+}
+public enum SCENELIST
+{
+    StartScene,
+    PackScene,
+    GameScene,
 }
