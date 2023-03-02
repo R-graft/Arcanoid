@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour, IPoolable
 {
-    [SerializeField]
-    private Rigidbody2D rb;
-
-    private ObjectPool<Bullet> _currentPool;
-
-    private const int _bulletSpeed = 5;
+    [Header("config")]
+    private const int _bulletSpeed = 8;
 
     private const int _bulletDamage = 1;
+
+    [Header("components")]
+    [SerializeField] private Rigidbody2D rb;
+
+    private ObjectPool<Bullet> _currentPool;
 
     public void OnCeateBullet(ObjectPool<Bullet> pool)
     {

@@ -10,13 +10,15 @@ public class PlatformMove : MonoBehaviour
 
     private float _scale;
 
+    private readonly Vector2 StartScale = new Vector2(2,2);
+
     public void Init()
     {
         _yPosition = transform.position.y;
 
         _moveSpeed = 0.1f;
 
-        transform.localScale = Vector3.one;
+        transform.localScale = StartScale;
 
         _scale = transform.localScale.x / 2;
 

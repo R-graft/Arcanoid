@@ -23,25 +23,24 @@ public class MenuSettingsWindow : UIWindow<MenuUI>
     {
         _langSwitcher.Init();
 
-        _musicSettings.SetDownAction(()=> _audioSettings.SetMusicEnable(_musicSettings.GetComponent<Image>()), true);
+        _musicSettings.SetDownAction(() => _audioSettings.SetMusicEnable(_musicSettings.GetComponent<Image>()), true);
 
         _soundSettings.SetDownAction(() => _audioSettings.SetSoundsEnable(_soundSettings.GetComponent<Image>()), true);
 
         _homeButton.SetDownAction(HideWindow, true);
     }
 
-    private void SetAudioButtonsImage()
-    {
-
-    }
     public override void InAnimation()
     {
         gameObject.SetActive(true);
 
-        DOTween.Sequence().Append(transform.DOMoveX(1.5f, 0.3f)).Append(transform.DOMoveX(0, 0.2f));
+        transform.position = new Vector2(-10, transform.position.y);
+
+        DOTween.Sequence().Append(transform.DOMoveX(0, 0.3f));
     }
 
     public override void OutAnimation() =>
-        DOTween.Sequence().Append(transform.DOMoveX(5, 0.2f).OnComplete(() => transform.position = new Vector2(-5, transform.position.y))).
-        AppendCallback(()=> gameObject.SetActive(false));
+        DOTween.Sequence().Append(transform.DOMoveX(10, 0.2f).
+        OnComplete(() => transform.position = new Vector2(-10, transform.position.y))).
+        AppendCallback(() => gameObject.SetActive(false));
 }

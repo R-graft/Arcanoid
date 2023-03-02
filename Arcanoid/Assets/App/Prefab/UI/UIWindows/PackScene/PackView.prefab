@@ -40,7 +40,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -2478.4614}
+  m_AnchoredPosition: {x: 400, y: 0}
   m_SizeDelta: {x: 1000, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6157049832788516485
@@ -178,7 +178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.804, y: 0.20600002}
   m_AnchorMax: {x: 0.804, y: 0.20600002}
-  m_AnchoredPosition: {x: -15, y: 3}
+  m_AnchoredPosition: {x: -15, y: 0}
   m_SizeDelta: {x: 130, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6157049832898135745
@@ -312,8 +312,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.596}
   m_AnchorMax: {x: 0.5, y: 0.596}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 391.23, y: 147.49}
+  m_AnchoredPosition: {x: 0.000030518, y: 0}
+  m_SizeDelta: {x: 1000, y: 147.49}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6157049833084243074
 CanvasRenderer:
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: dungeon
+  m_text: "\u043B\u0443\u0441"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 26fe08d1453b1c5468ec94714cf0ab4d, type: 2}
   m_sharedMaterial: {fileID: -5775749494298724267, guid: 26fe08d1453b1c5468ec94714cf0ab4d, type: 2}
@@ -521,7 +521,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.70100003, y: 0.35000002}
   m_AnchorMax: {x: 0.70100003, y: 0.35000002}
-  m_AnchoredPosition: {x: 7, y: -0.74500275}
+  m_AnchoredPosition: {x: 7, y: 0}
   m_SizeDelta: {x: 188.3265, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6157049834499953338

@@ -25,10 +25,10 @@ public class GameWinWindow : UIWindow<GameUI>
 
     public override void InitWindow(GameUI uiParent)
     {
+        _continue.SetDownAction(HideWindow, true);
+
         _continue.SetDownAction(uiParent.OnStart, true);
         _continue.SetDownAction(uiParent.OnReStart, true);
-
-        _continue.SetUpAction(HideWindow, true);
     }
 
     public override void ShowWindow()
@@ -60,6 +60,6 @@ public class GameWinWindow : UIWindow<GameUI>
 
         _levelProgress.value = ((float)currentPack.EndedLevel - 1) / (float)currentPack.finishLevel;
 
-        DOTween.To(() => _levelProgress.value, x => _levelProgress.value = x, currentPogress, 5);
+        DOTween.To(() => _levelProgress.value, x => _levelProgress.value = x, currentPogress, 1);
     }
 }

@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class GameProgressController : Singleton<GameProgressController> 
 {
-    [SerializeField]
-    private PacksData _packsDataObject;
+    [SerializeField] private PacksData _packsDataObject;
 
     private GameProgressData CurrentProgressData;
 

@@ -14,12 +14,12 @@ public abstract class UIWindow<T> : MonoBehaviour, IAnimatedElement
     {
         gameObject.SetActive(true);
 
-        DOTween.Sequence().Append(transform.DOMoveY(4, 0.1f)).Append(transform.DOMoveY(5, 0.1f));
+        DOTween.Sequence().Append(transform.DOMoveY(8, 0.1f)).Append(transform.DOMoveY(10, 0.1f));
     }
 
     public virtual void OutAnimation()
     {
-        DOTween.Sequence().Append(transform.DOMoveY(4, 0.1f)).Append(transform.DOMoveY(15, 0.1f)).
+        DOTween.Sequence().Append(transform.DOMoveY(8, 0.1f)).Append(transform.DOMoveY(25, 0.1f)).
         AppendCallback(()=> gameObject.SetActive(false));
     }
 

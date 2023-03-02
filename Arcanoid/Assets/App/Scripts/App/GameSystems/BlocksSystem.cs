@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class BlocksSystem : MonoBehaviour
 {
-    [SerializeField]
-    private BlocksArranger _blocksArranger;
+    [Header("config")]
+    public int rowsCount = 10;
+    public int linesCount = 10;
 
-    private Grid _grid;
+    [SerializeField] private BlocksArranger _blocksArranger;
+
+    private FieldGrid _grid;
 
     private int _currentBlocksCount;
 
-    public readonly int RowsCount = 10;
-
-    public readonly int LinesCount = 10;
+    private Vector2 _blockSize;
 
     public Dictionary<(int x, int y), Block> _gridIndexes = new Dictionary<(int x, int y), Block>();
 
@@ -25,9 +26,11 @@ public class BlocksSystem : MonoBehaviour
 
     public void Init()
     {
-        _grid = new Grid();
+        _grid = new FieldGrid(rowsCount, linesCount);
 
         _gridWorldPositions = _grid.CreateGrid();
+
+        _blockSize = _grid.GetBlocksSize();
 
         BlocksArranger.OnGetBlocksCount += SetStartBlocksCount;
     }
@@ -38,7 +41,7 @@ public class BlocksSystem : MonoBehaviour
 
         _gridIndexes = new Dictionary<(int x, int y), Block>();
 
-        _blocksArranger.GetBlocks(_gridWorldPositions, _gridIndexes);
+        _blocksArranger.GetBlocks(_gridWorldPositions, _gridIndexes, _blockSize);
     }
 
     public void BlockRemove((int x, int y) index)

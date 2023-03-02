@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class PlatformResizeBonus : Bonus
 {
     public float resizeValue;

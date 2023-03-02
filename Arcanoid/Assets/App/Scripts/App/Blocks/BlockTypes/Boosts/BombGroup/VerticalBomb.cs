@@ -8,7 +8,7 @@ public class VerticalBomb : BombBlock
         {
             _damage = -1;
 
-            var linesCount = _blocksSystem.LinesCount;
+            var linesCount = _blocksSystem.linesCount;
 
             _currentIndexes = new List<(int x, int y)>();
 

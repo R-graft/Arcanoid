@@ -5,7 +5,7 @@ public class BoostBlock : Block, IDamageable
     [SerializeField]
     private int health;
 
-    public override int HealthCount { get; set; }
+   // public override int HealthCount { get; set; }
 
     public override void InDamage(int damageValue)
     {

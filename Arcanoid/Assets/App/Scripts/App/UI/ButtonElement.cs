@@ -9,7 +9,7 @@ public class ButtonElement : Button ,IAnimatedElement
 
     protected Action OnUpAction;
 
-    protected const float animateDuration = 0.3f;
+    protected const float animateDuration = 0.25f;
 
     public override void OnPointerDown(PointerEventData eventData)
     {
@@ -34,8 +34,15 @@ public class ButtonElement : Button ,IAnimatedElement
 
     public void SetUpAction(Action act, bool add) => OnUpAction = add ? OnUpAction += act : OnUpAction -= act;
 
-    public virtual void InAnimation() => 
-        transform.DOShakeRotation(animateDuration, 90).OnComplete(OnDownAction.Invoke);
+    public virtual void InAnimation()
+    {
+        Inputs.Instance.TurnOff(true);
+
+        DOTween.Sequence().
+        AppendCallback(() => OnDownAction.Invoke()).
+        Append(transform.DOShakeRotation(animateDuration, 90)).
+        AppendCallback(() => Inputs.Instance.TurnOn(true));
+    }
 
     public virtual void OutAnimation()
     {

@@ -5,22 +5,26 @@ using UnityEngine;
 
 public class BlocksArranger : MonoBehaviour
 {
+    [Header("config")]
+    public float SpawnHold = 0.02f;
+
     private LevelData _levelData;
 
     private Dictionary<BlocksList, ObjectPool<Block>> _pools;
 
-    [HideInInspector]
-    public int currentBlocksCount;
+    [HideInInspector] public int currentBlocksCount;
 
-    public const float SpawnHold = 0.02f;
+    private Vector2 _startBlockSize;
+
     public static Action OnBlocksGridFull;
 
     public static Action<int> OnGetBlocksCount;
 
-
-    public void GetBlocks(Dictionary<(int x, int y), Vector2> gridWorldPositions, Dictionary<(int x, int y), Block> blocksGrid)
+    public void GetBlocks(Dictionary<(int x, int y), Vector2> gridWorldPositions, Dictionary<(int x, int y), Block> blocksGrid, Vector2 size)
     {
         _pools = SpawnSystem.Pools;
+
+        _startBlockSize = size;
 
         _levelData = new LevelDataLoader().GetCurrentLevelData();
 
@@ -56,6 +60,8 @@ public class BlocksArranger : MonoBehaviour
             yield return new WaitForSeconds(SpawnHold);
 
             var spawnedBlock = GetPoolObjects(_levelData.blockTags[i], gridWorldPositions[(_levelData.blockIndexX[i], _levelData.blockIndexY[i])]);
+
+            spawnedBlock.SetStartSize(_startBlockSize);
 
             spawnedBlock.selfGridIndex = (_levelData.blockIndexX[i], _levelData.blockIndexY[i]);
 

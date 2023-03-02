@@ -2,35 +2,39 @@ using UnityEngine;
 
 public class EntryPoint : MonoBehaviour
 {
-    [SerializeField]
-    private GameProgressController _gameProgress;
+    [Header("instances")]
+    [SerializeField] private GameProgressController _gameProgress;
+    [SerializeField] private ScenesManager _scenesManager;
+    [SerializeField] private Inputs _inputs;
+    [SerializeField] private ScreenSizeHandler _screen;
+    [SerializeField] private AudioController _audio;
 
-    [SerializeField]
-    private ScenesManager _scenesManager;
+    [Header("components")]
+    private Camera _m_Camera;
 
-    [SerializeField]
-    private Inputs _inputs;
-
-    [SerializeField]
-    private MenuUI _menuUI;
-
-    [SerializeField]
-    private AudioController _audio;
-
+    private static bool _isInitialized;
     private void Awake()
     {
-        Application.targetFrameRate = 60;
+        if (!_isInitialized)
+        {
+            _gameProgress = Instantiate(_gameProgress);
+            _gameProgress.Init();
 
-        _gameProgress.Init();
+            _scenesManager = Instantiate(_scenesManager);
+            _scenesManager.Init();
 
-         _scenesManager.Init();
+            _inputs = Instantiate(_inputs);
+            _inputs.Init();
 
-        _inputs.Init();
+            _screen = Instantiate(_screen);
+            _screen.Init();
 
-        _menuUI.Init();
+            _audio = Instantiate(_audio);
+            _audio.Init();
 
-        _audio.Init();
+            _inputs.TurnOn(true);
 
-        _inputs.TurnOn(true);
+            _isInitialized = true;
+        }
     }
 }

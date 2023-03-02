@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class BallsController : MonoBehaviour
 {
-	[SerializeField]
-	private Ball _ballPrefab;
+    [Header("config")]
+    public Vector2 _startBallPosition = new Vector2(0, -5.5f);
 
-    [SerializeField]
-    private BallLauncher _launcherHandler;
+    [SerializeField] private Ball _ballPrefab;
+
+    [SerializeField] private BallLauncher _launcherHandler;
 
 	private List<Ball> _balls;
-
-    private readonly Vector2 _startBallPosition = new Vector2(0, -2.85f);
 
     public static Action<Ball> OnBallDestroy;
 

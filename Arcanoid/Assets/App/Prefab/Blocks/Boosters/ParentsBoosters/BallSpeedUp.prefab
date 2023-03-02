@@ -126,12 +126,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84d3f025af925cb4aa6fd3e5a5f04a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolSize: 10
+  blockId: 8
+  _collider: {fileID: 1509353130986910368}
+  _blockSprite: {fileID: 521569264472985890}
   _sound: {fileID: -6403758161347370965}
   _blocksSystem: {fileID: 0}
-  _blockSprite: {fileID: 521569264472985890}
-  _collider: {fileID: 1509353130986910368}
-  blockId: 8
-  poolSize: 10
   health: 1
   _bonusPrefab: {fileID: 3534828220334272844}
   _isSpeedUp: 1
@@ -346,11 +346,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: 4f66c66510f735240a24b37e6f32e0b7, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: 4f66c66510f735240a24b37e6f32e0b7, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: 4f66c66510f735240a24b37e6f32e0b7, type: 3}
       propertyPath: m_LocalPosition.x

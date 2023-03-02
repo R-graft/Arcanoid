@@ -8,7 +8,7 @@ public class HorizontalBomb : BombBlock
         {
             _damage = -1;
 
-            var rowsCount = _blocksSystem.LinesCount;
+            var rowsCount = _blocksSystem.linesCount;
 
             _currentIndexes = new List<(int x, int y)>();
 

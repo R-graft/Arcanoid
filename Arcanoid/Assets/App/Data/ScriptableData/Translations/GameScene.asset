@@ -40,10 +40,10 @@ MonoBehaviour:
   - key: continueWithEnergy
     phrases:
     - langName: Eng
-      phrase: Continue with 5 energy
+      phrase: Continue with 5 energy?
     - langName: Rus
       phrase: " \u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0437\u0430
-        5 \u044D\u043D\u0435\u0440\u0433\u0438\u0438"
+        5 \u044D\u043D\u0435\u0440\u0433\u0438\u0438?"
     hide: 0
   - key: pause
     phrases:

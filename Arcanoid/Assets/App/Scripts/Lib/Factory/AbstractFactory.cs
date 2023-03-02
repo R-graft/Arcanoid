@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class AbstractFactory<T> : MonoBehaviour
+public abstract class AbstractFactory<T>
 {
     public abstract T CreateObject();
 }

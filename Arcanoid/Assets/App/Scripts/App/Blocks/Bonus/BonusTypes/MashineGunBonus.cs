@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class MashineGunBonus : Bonus
 {
-    [SerializeField]
-    private Bullet _prefab;
+    [Header ("config")]
+    public int bulletsPoolSize = 10;
+
+    public float offsetX = 0.5f;
+
+    public float offsetY = 0.5f;
+
+    public float reloadTime = 0.3f;
+
+    public float disableHold = 2f;
+
+    [Header("components")]
+    [SerializeField] private Bullet _prefab;
 
     private ObjectPool<Bullet> _bulletPool;
 
     private List<Bullet> _bullets;
-
-    private const int _bulletsPoolSize = 10;
-
-    private float _offsetX = 0.3f;
-
-    private const float _offsetY = 0.2f;
 
     public override void Apply()
     {
@@ -45,7 +50,7 @@ public class MashineGunBonus : Bonus
             bullet => bullet.gameObject.SetActive(true),
             bullet => bullet.gameObject.SetActive(false));
 
-        for (int i = 0; i < _bulletsPoolSize; i++)
+        for (int i = 0; i < bulletsPoolSize; i++)
         {
             _bulletPool.CreatePoolObject();
         }
@@ -55,7 +60,7 @@ public class MashineGunBonus : Bonus
 
     private IEnumerator Shooting()
     {
-        int count = _bulletsPoolSize;
+        int count = bulletsPoolSize;
 
         while (count > 0)
         {
@@ -63,17 +68,18 @@ public class MashineGunBonus : Bonus
 
             var bullet1 = _bulletPool.Get();
 
-            bullet1.transform.position = new Vector2(position.x + _offsetX, position.y + _offsetY);
+            bullet1.transform.position = new Vector2(position.x + offsetX, position.y + offsetY);
 
             var bullet2 = _bulletPool.Get();
 
-            bullet2.transform.position = new Vector2(position.x - _offsetX, position.y + _offsetY);
+            bullet2.transform.position = new Vector2(position.x - offsetX, position.y + offsetY);
 
             count--;
 
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(reloadTime);
         }
 
+        yield return new WaitForSecondsRealtime(disableHold);
         Remove();
     }
     private Bullet CreateBullet()
@@ -95,6 +101,6 @@ public class MashineGunBonus : Bonus
 
     private void OnSetScale(float value)
     {
-        _offsetX += value/2;
+        offsetX += value/2;
     }
 }

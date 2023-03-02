@@ -4,8 +4,7 @@ using UnityEngine.EventSystems;
 
 public class Inputs : Singleton<Inputs>
 {
-    [SerializeField]
-    private EventSystem _eventSystem;
+    [SerializeField] private EventSystem _eventSystem;
 
     private const float _inputConstrainterY = 0;
 
@@ -13,44 +12,53 @@ public class Inputs : Singleton<Inputs>
 
     public static Action OnMouseUp, OnMouseDown;
 
-    public Camera _camera;
+    private Camera _camera;
 
-    private bool _updateButtons;
+    private bool _enabled;
 
     public void Init()
     {
         SingleInit();
 
-        _updateButtons = false;
+        _enabled = false;
     }
 
+    public void SetCamera()
+    {
+        _camera = Camera.main;
+    }
     public void TurnOff(bool allSystem)
     {
         if (allSystem)
         {
             _eventSystem.enabled = false;
         }
-        _updateButtons = false;
+        else
+        {
+            _enabled = false;
+        }
     }
 
     public void TurnOn(bool allSystem)
     {
-        if (!_camera)
-        {
-            _camera = Camera.main;
-        }
-
         if (allSystem)
         {
             _eventSystem.enabled = true;
         }
-        _updateButtons = true;
+        else
+        {
+            _enabled = true;
+        }
     }
-  
     
     public void Update()
     {
-        if (_updateButtons)
+        if (!_camera)
+        {
+            SetCamera();
+        }
+
+        if (_enabled)
         {
             if (Input.GetMouseButton(0))
             {
