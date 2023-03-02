@@ -11,7 +11,7 @@ public class SpawnSystem : MonoBehaviour
 
     public static Dictionary<BlocksList, ObjectPool<Block>> Pools { get; private set; }
     
-    public Dictionary<BlocksList, AbstractFactory<Block>> factories;
+    public Dictionary<BlocksList, FactoryBlock<Block>> factories;
 
     public void Init()
     {
@@ -21,11 +21,11 @@ public class SpawnSystem : MonoBehaviour
 	{
         Pools = new Dictionary<BlocksList, ObjectPool<Block>>();
 
-        factories = new Dictionary<BlocksList, AbstractFactory<Block>>();
+        factories = new Dictionary<BlocksList, FactoryBlock<Block>>();
 
         foreach (var block in _blocksData.blocksTypes)
         {
-            AbstractFactory<Block> factory = new FactoryBlock<Block>(block, _blockSystem);
+            FactoryBlock<Block> factory = new FactoryBlock<Block>(block, _blockSystem);
 
             factories.Add(block.blockId, factory);
 

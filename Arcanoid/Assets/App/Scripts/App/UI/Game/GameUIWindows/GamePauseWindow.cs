@@ -10,11 +10,11 @@ public class GamePauseWindow : UIWindow<GameUI>
 
     public override void InitWindow(GameUI uiParent)
     {
-        _exitButton.SetUpAction(() => Time.timeScale = 1, true) ;
+        _exitButton.SetUpAction(uiParent.OnPause, true);
 
         _exitButton.SetUpAction(uiParent.OnSceneLoad, true);
 
-        _continueButton.SetUpAction(uiParent.OnPause, true); ;
+        _continueButton.SetUpAction(uiParent.OnPause, true); 
 
         _continueButton.SetUpAction(HideWindow, true);
     }
@@ -22,13 +22,11 @@ public class GamePauseWindow : UIWindow<GameUI>
     {
         gameObject.SetActive(true);
 
-        DOTween.Sequence().Append(transform.DOMoveY(4, 0.1f)).
-            Append(transform.DOMoveY(5, 0.1f)).AppendCallback(()=> Time.timeScale =0);
+        DOTween.Sequence().Append(transform.DOMoveY(8, 0.1f)).
+            Append(transform.DOMoveY(10, 0.1f));
     }
     public override void OutAnimation()
     {
-        Time.timeScale = 1;
-
         base.OutAnimation();
     }
 }

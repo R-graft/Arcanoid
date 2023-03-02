@@ -2,22 +2,14 @@ using UnityEngine;
 
 public class AudioController : Singleton<AudioController>
 {
-    [SerializeField]
-    private AudioSource _backgroundAudio;
+    [SerializeField]  private AudioSource _backgroundAudio;
+    [SerializeField] private AudioSource _buttonAudio;
 
-    [SerializeField]
-    private AudioSource _buttonAudio;
+    [SerializeField] private AudioClip _menu;
+    [SerializeField] private AudioClip _game;
+    [SerializeField] private AudioClip _pack;
 
     private AudioState _audioState;
-
-    [SerializeField]
-    private AudioClip _menu;
-
-    [SerializeField]
-    private AudioClip _game;
-
-    [SerializeField]
-    private AudioClip _pack;
 
     public void Init()
     {
@@ -84,10 +76,10 @@ public class AudioController : Singleton<AudioController>
 
     private void OnEnable()
     {
-        ScenesManager.OnLoadScene += SetCurrentAudioClip;
+        ScenesManager.Instance.OnLoadScene += SetCurrentAudioClip;
     }
     private void OnDisable()
     {
-        ScenesManager.OnLoadScene -= SetCurrentAudioClip;
+        ScenesManager.Instance.OnLoadScene -= SetCurrentAudioClip;
     }
 }

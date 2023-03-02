@@ -208,12 +208,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aec695f51cf89324fbbcc6043ab10745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolSize: 10
+  blockId: 14
+  _collider: {fileID: 1509353130986910368}
+  _blockSprite: {fileID: 521569264472985890}
   _sound: {fileID: 4769136238886239958}
   _blocksSystem: {fileID: 0}
-  _blockSprite: {fileID: 521569264472985890}
-  _collider: {fileID: 1509353130986910368}
-  blockId: 14
-  poolSize: 10
   health: 1
   _furyBallBonusPrefab: {fileID: 3980181612623221092}
 --- !u!82 &1429765406495180215
@@ -339,17 +339,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: FuryBallBonus
       objectReference: {fileID: 0}
+    - target: {fileID: 1756265613901539543, guid: aa5247b4711d0e0459b6be3c3cbe0c3e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: aa5247b4711d0e0459b6be3c3cbe0c3e, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: aa5247b4711d0e0459b6be3c3cbe0c3e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: aa5247b4711d0e0459b6be3c3cbe0c3e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: aa5247b4711d0e0459b6be3c3cbe0c3e, type: 3}
       propertyPath: m_LocalPosition.x

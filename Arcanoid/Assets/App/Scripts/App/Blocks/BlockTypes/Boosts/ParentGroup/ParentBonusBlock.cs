@@ -4,6 +4,8 @@ public class ParentBonusBlock : BoostBlock
 {
     protected Bonus _childBonus;
 
+    private readonly Vector2 _childStartscale = new Vector2(0.6f, 0.6f);
+
     protected virtual void SetChildBonus()
     {
     }
@@ -16,6 +18,6 @@ public class ParentBonusBlock : BoostBlock
 
         _childBonus.transform.parent = null;
 
-        _childBonus.transform.localScale = new Vector2(0.2f, 0.2f);
+        _childBonus.transform.localScale = _childStartscale;
     }
 }

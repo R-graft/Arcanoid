@@ -4,25 +4,28 @@ using DG.Tweening;
 [System.Serializable]
 public abstract class Block : MonoBehaviour, IPoolable, IAnimatedElement
 {
-    [SerializeField]
-    private BlockSounds _sound;
+    [Header("controller")]
+    public int poolSize;
+    [HideInInspector] public (int x, int y) selfGridIndex;
 
-    [HideInInspector]
-    public BlocksSystem _blocksSystem;
-
-    public SpriteRenderer _blockSprite;
+    [Header("model")]
+    public BlocksList blockId;
 
     public Collider2D _collider;
 
-    public BlocksList blockId;
+    public int HealthCount { get; set; }
 
-    public int poolSize;
+    [Header("view")]
+    public SpriteRenderer _blockSprite;
 
-    [HideInInspector]
-    public (int x, int y) selfGridIndex;
+    [SerializeField] private BlockSounds _sound;
 
-    public virtual int HealthCount { get; set; }
+    [HideInInspector] public BlocksSystem _blocksSystem;
 
+    public void SetStartSize(Vector2 size)
+    {
+        transform.localScale = size;
+    }
     public virtual void InAnimation()
     {
         _sound.GetSoundState();

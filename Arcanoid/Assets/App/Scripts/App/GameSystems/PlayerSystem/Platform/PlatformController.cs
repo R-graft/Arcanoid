@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class PlatformController : MonoBehaviour
 {
-    [SerializeField]
-    private PlatformMove _platformMove;
+    [Header("config")]
+    public Vector2 _startPlatformPosition = new Vector2(0, -3.2f);
+
+    [SerializeField] private PlatformMove _platformMove;
 
     public static Func<Transform> OnGetTransform;
-
-    private readonly Vector2 _startPlatformPosition = new Vector2(0, -3.2f);
 
     public void Init()
     {

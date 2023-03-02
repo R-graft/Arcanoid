@@ -126,12 +126,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84d3f025af925cb4aa6fd3e5a5f04a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolSize: 10
+  blockId: 9
+  _collider: {fileID: 1509353130986910368}
+  _blockSprite: {fileID: 521569264472985890}
   _sound: {fileID: 6209726034368764952}
   _blocksSystem: {fileID: 0}
-  _blockSprite: {fileID: 521569264472985890}
-  _collider: {fileID: 1509353130986910368}
-  blockId: 9
-  poolSize: 10
   health: 1
   _bonusPrefab: {fileID: 6551214856834633369}
   _isSpeedUp: 0
@@ -340,17 +340,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: BallSpeedDown
       objectReference: {fileID: 0}
+    - target: {fileID: 1756265613901539543, guid: 2854de39a14ad7e43a84f2752ac378fe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: 2854de39a14ad7e43a84f2752ac378fe, type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: 2854de39a14ad7e43a84f2752ac378fe, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: 2854de39a14ad7e43a84f2752ac378fe, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4429689815837705871, guid: 2854de39a14ad7e43a84f2752ac378fe, type: 3}
       propertyPath: m_LocalPosition.x

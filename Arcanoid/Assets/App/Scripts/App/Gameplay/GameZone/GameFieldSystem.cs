@@ -16,9 +16,9 @@ public class GameFieldSystem : MonoBehaviour
 
     private Vector2 _screenValue;
 
-    private const float UpOffset = 0.8f;
+    private const float UpOffset = 0.75f;
 
-    private const float ColliderWidth = 2;
+    private const float ColliderWidth = 4;
 
     public void Init()
     {

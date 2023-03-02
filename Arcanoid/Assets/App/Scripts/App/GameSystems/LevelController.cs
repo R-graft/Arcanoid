@@ -2,31 +2,23 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
-    [SerializeField]
-    private SpawnSystem _spawnSystem;
+    [SerializeField] private SpawnSystem _spawnSystem;
 
-    [SerializeField]
-    private BlocksSystem _blocksSystem;
+    [SerializeField] private BlocksSystem _blocksSystem;
 
-    [SerializeField]
-    private PlatformController _platformController;
+    [SerializeField] private PlatformController _platformController;
 
-    [SerializeField]
-    private BallsController _ballController;
+    [SerializeField] private BallsController _ballController;
 
-    [SerializeField]
-    private BoostSystem _boostSystem;
+    [SerializeField] private BoostSystem _boostSystem;
 
-    [SerializeField]
-    private GameFieldSystem _gamefieldSystem;
+    [SerializeField] private GameFieldSystem _gamefieldSystem;
 
-    [SerializeField]
-    private GamePanelController _gamePanelController;
+    [SerializeField] private GamePanelController _gamePanelController;
 
-    [SerializeField]
-    private GameUI _GameUI;
+    [SerializeField] private GameUI _GameUI;
 
-    public Inputs _inputs;
+    private Inputs _inputs;
 
     private void Awake()
     {
@@ -80,13 +72,19 @@ public class LevelController : MonoBehaviour
     public void PauseGame()
     {
         if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+
             _inputs.TurnOn(false);
+        }
 
         else
         {
             _inputs.TurnOff(false);
 
             _GameUI.GameUiPause();
+
+            Time.timeScale = 0;
         }
     }
 
@@ -102,6 +100,7 @@ public class LevelController : MonoBehaviour
 
         if (_gamePanelController.LivesCount == 0)
             _GameUI.GameUiGameOver();
+
         else
             _GameUI.GameUiLose();
     }

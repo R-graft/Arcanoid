@@ -3,55 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[System.Serializable]
-public class TextTranslator
-{
-    public string key;
-
-    public Text t;
-
-    public TMP_Text tMp;
-
-    public TMP_Text[] tMps;
-
-    public Text[] ts;
-}
-
-[System.Serializable]
-public class LangPhrase
-{
-    public string langName;
-
-    public string phrase;
-}
-
-[System.Serializable]
-public class Word
-{
-    public string key = "";
-
-    public List<LangPhrase> phrases = new List<LangPhrase>();
-
-    public bool hide = true;
-
-    public Word(WordList data)
-    {
-        for (int i = 0; i < data.languages.Count; i++)
-        {
-            phrases.Add(new LangPhrase() { langName = data.languages[i], phrase = "" });
-        }
-    }
-    public Word(Word wordKey)
-    {
-        for (int i = 0; i < wordKey.phrases.Count; i++)
-        {
-            phrases.Add(wordKey.phrases[i]);
-        }
-    }
-    public Word()
-    {
-    }
-}
 public class LangController : MonoBehaviour
 {
     public WordList translatesData;
@@ -120,5 +71,55 @@ public class LangController : MonoBehaviour
     private void OnDisable()
     {
         LangSwitcher.OnLangSwitch -= ChangeLang;
+    }
+}
+
+[System.Serializable]
+public class TextTranslator
+{
+    public string key;
+
+    public Text t;
+
+    public TMP_Text tMp;
+
+    public TMP_Text[] tMps;
+
+    public Text[] ts;
+}
+
+[System.Serializable]
+public class LangPhrase
+{
+    public string langName;
+
+    public string phrase;
+}
+
+[System.Serializable]
+public class Word
+{
+    public string key = "";
+
+    public List<LangPhrase> phrases = new List<LangPhrase>();
+
+    public bool hide = true;
+
+    public Word(WordList data)
+    {
+        for (int i = 0; i < data.languages.Count; i++)
+        {
+            phrases.Add(new LangPhrase() { langName = data.languages[i], phrase = "" });
+        }
+    }
+    public Word(Word wordKey)
+    {
+        for (int i = 0; i < wordKey.phrases.Count; i++)
+        {
+            phrases.Add(wordKey.phrases[i]);
+        }
+    }
+    public Word()
+    {
     }
 }

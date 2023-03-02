@@ -9,7 +9,7 @@ public class MenuUI : MonoBehaviour
     [SerializeField]
     private UIWindow<MenuUI> _startWindow;
 
-    public void Init()
+    public void Start()
     {
         _settingsWindow.InitWindow(this);
 

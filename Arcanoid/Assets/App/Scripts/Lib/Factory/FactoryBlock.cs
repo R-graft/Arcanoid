@@ -1,5 +1,7 @@
 
-public class FactoryBlock<T> : AbstractFactory<T> where T : Block
+using UnityEngine;
+
+public class FactoryBlock<T> where T : Block
 {
     private T _creatingObject;
 
@@ -11,9 +13,9 @@ public class FactoryBlock<T> : AbstractFactory<T> where T : Block
         _blocksController = controller;
     }
 
-    public override T CreateObject()
+    public  T CreateObject()
     {
-        var creatingBlock = Instantiate(_creatingObject, _blocksController.transform);
+        var creatingBlock = Object.Instantiate(_creatingObject, _blocksController.transform);
 
         creatingBlock._blocksSystem = _blocksController;
 

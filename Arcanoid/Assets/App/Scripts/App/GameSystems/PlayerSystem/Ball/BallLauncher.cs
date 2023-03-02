@@ -10,9 +10,9 @@ public class BallLauncher : MonoBehaviour , IPointerUpHandler, IPointerDownHandl
 
     private const float BallDisposition = 0.9f;
 
-    private const float BallOffset = 0.2f;
+    private const float BallOffset = 0.4f;
 
-    private const float StartForceIndex = 0.02f;
+    private const float StartForceIndex = 0.04f;
 
     public void Init(Rigidbody2D ballRb, Transform platformTransform)
     {

@@ -5,19 +5,25 @@ using UnityEngine.SceneManagement;
 
 public class ScenesManager : Singleton<ScenesManager>
 {
-    public GameObject loadPanelPrefab;
+    [SerializeField] private GameObject _loadPanelPrefab;
 
     private AsyncOperation _loadingScene;
 
-    public SCENELIST currentScene;
+    private SCENELIST currentScene;
 
     private float _minLoadingTime;
 
-    public static Action<SCENELIST> OnLoadScene;
+    public Action<SCENELIST> OnLoadScene;
+
+    public Action OnSceneIsLoaded;
 
     public void Init()
     {
         SingleInit();
+
+        _loadPanelPrefab = Instantiate(_loadPanelPrefab, transform);
+
+        _loadPanelPrefab.SetActive(false);
     }
     public void LoadScene(SCENELIST targetScene)
     {
@@ -30,7 +36,7 @@ public class ScenesManager : Singleton<ScenesManager>
     {
         _minLoadingTime = 0.8f;
 
-        Instantiate(loadPanelPrefab);
+        _loadPanelPrefab.SetActive(true);
 
         _loadingScene = SceneManager.LoadSceneAsync(targetScene.ToString());
 
@@ -44,6 +50,13 @@ public class ScenesManager : Singleton<ScenesManager>
         }
         
         _loadingScene.allowSceneActivation = true;
+
+        while (!_loadingScene.isDone)
+        {
+            yield return null;
+        }
+
+        _loadPanelPrefab.SetActive(false);
 
         OnLoadScene?.Invoke(currentScene);
     }

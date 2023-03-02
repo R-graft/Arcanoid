@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LevelDataLoader : MonoBehaviour
+public class LevelDataLoader
 {
     private int _currentLevel;
 

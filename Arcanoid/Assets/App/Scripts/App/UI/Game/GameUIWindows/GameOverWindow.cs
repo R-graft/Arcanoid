@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class GameOverWindow : UIWindow<GameUI>
 {
-    [SerializeField]
-    private ButtonElement _continueButton;
+    [SerializeField] private ButtonElement _continueButton;
 
-    [SerializeField]
-    private ButtonElement _exitButton;
+    [SerializeField] private ButtonElement _exitButton;
 
     private const int EnergyForContinue = 5;
 
@@ -17,7 +15,7 @@ public class GameOverWindow : UIWindow<GameUI>
         _continueButton.SetDownAction(OnButtonContinueWihEnergy, true);
         _continueButton.SetDownAction(uiParent.OnReStart, true);
 
-        _continueButton.SetUpAction(HideWindow, true);
+        _continueButton.SetDownAction(HideWindow, true);
 
         _exitButton.SetDownAction(uiParent.OnSceneLoad, true);
     }
